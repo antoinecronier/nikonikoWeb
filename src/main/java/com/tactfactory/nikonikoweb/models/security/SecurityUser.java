@@ -1,8 +1,13 @@
 package com.tactfactory.nikonikoweb.models.security;
 
+import javax.persistence.Inheritance;
+import javax.persistence.MappedSuperclass;
+
 import com.tactfactory.nikonikoweb.models.base.DatabaseItem;
 
-public class SecurityUser extends DatabaseItem {
+@MappedSuperclass
+@Inheritance
+public abstract class SecurityUser extends DatabaseItem {
 
 	private String login;
 

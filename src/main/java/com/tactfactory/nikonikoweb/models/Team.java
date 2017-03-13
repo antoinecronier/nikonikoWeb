@@ -1,21 +1,33 @@
 package com.tactfactory.nikonikoweb.models;
 
-import java.util.ArrayList;
+import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.tactfactory.nikonikoweb.models.base.DatabaseItem;
 
+@Entity
+@Table(name = "nikoniko_team")
 public class Team extends DatabaseItem {
 
+	@Transient
 	public static final String TABLE = "team";
+
+	@Transient
 	public static final String[] FIELDS = { "id", "name", "serial" };
 
 	private String name;
 
 	private String serial;
 
-	private ArrayList<Project> projects;
+	@ManyToMany
+	private Set<Project> projects;
 
-	private ArrayList<User> users;
+	@ManyToMany
+	private Set<User> users;
 
 	/**
 	 * @return the name
@@ -50,7 +62,7 @@ public class Team extends DatabaseItem {
 	/**
 	 * @return the projects
 	 */
-	public ArrayList<Project> getProjects() {
+	public Set<Project> getProjects() {
 		return projects;
 	}
 
@@ -58,14 +70,14 @@ public class Team extends DatabaseItem {
 	 * @param projects
 	 *            the projects to set
 	 */
-	public void setProjects(ArrayList<Project> projects) {
+	public void setProjects(Set<Project> projects) {
 		this.projects = projects;
 	}
 
 	/**
 	 * @return the users
 	 */
-	public ArrayList<User> getUsers() {
+	public Set<User> getUsers() {
 		return users;
 	}
 
@@ -73,7 +85,7 @@ public class Team extends DatabaseItem {
 	 * @param users
 	 *            the users to set
 	 */
-	public void setUsers(ArrayList<User> users) {
+	public void setUsers(Set<User> users) {
 		this.users = users;
 	}
 
@@ -81,13 +93,9 @@ public class Team extends DatabaseItem {
 		super(Team.TABLE, Team.FIELDS);
 		this.name = name;
 		this.serial = serial;
-		this.projects = new ArrayList<Project>();
-		this.users = new ArrayList<User>();
 	}
 
 	public Team() {
 		super(Team.TABLE, Team.FIELDS);
-		this.projects = new ArrayList<Project>();
-		this.users = new ArrayList<User>();
 	}
 }

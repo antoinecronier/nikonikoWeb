@@ -1,24 +1,40 @@
 package com.tactfactory.nikonikoweb.models;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.tactfactory.nikonikoweb.models.base.DatabaseItem;
 
+@Entity
+@Table(name = "nikoniko_project")
 public class Project extends DatabaseItem {
 
+	@Transient
 	public static final String TABLE = "project";
+
+	@Transient
 	public static final String[] FIELDS = { "id", "name", "start_Date", "end_Date" };
 
 	private String name;
 
+	@Column(nullable = true)
 	private Date start_date;
 
+	@Column(nullable = true)
 	private Date end_date;
 
-	private ArrayList<NikoNiko> nikoNikos;
+	@OneToMany
+	private Set<NikoNiko> nikoNikos;
 
-	private ArrayList<Team> teams;
+	@ManyToMany
+	private Set<Team> teams;
 
 	/**
 	 * @return the name
@@ -68,7 +84,7 @@ public class Project extends DatabaseItem {
 	/**
 	 * @return the nikoNikos
 	 */
-	public ArrayList<NikoNiko> getNikoNikos() {
+	public Set<NikoNiko> getNikoNikos() {
 		return nikoNikos;
 	}
 
@@ -76,14 +92,14 @@ public class Project extends DatabaseItem {
 	 * @param nikoNikos
 	 *            the nikoNikos to set
 	 */
-	public void setNikoNikos(ArrayList<NikoNiko> nikoNikos) {
+	public void setNikoNikos(Set<NikoNiko> nikoNikos) {
 		this.nikoNikos = nikoNikos;
 	}
 
 	/**
 	 * @return the teams
 	 */
-	public ArrayList<Team> getTeams() {
+	public Set<Team> getTeams() {
 		return teams;
 	}
 
@@ -91,7 +107,7 @@ public class Project extends DatabaseItem {
 	 * @param teams
 	 *            the teams to set
 	 */
-	public void setTeams(ArrayList<Team> teams) {
+	public void setTeams(Set<Team> teams) {
 		this.teams = teams;
 	}
 
@@ -99,8 +115,6 @@ public class Project extends DatabaseItem {
 		super(Project.TABLE, Project.FIELDS);
 		this.name = name;
 		this.start_date = start_date;
-		this.teams = new ArrayList<Team>();
-		this.nikoNikos = new ArrayList<NikoNiko>();
 	}
 
 	public Project(String name, Date start_date, Date end_date) {
@@ -108,13 +122,9 @@ public class Project extends DatabaseItem {
 		this.name = name;
 		this.start_date = start_date;
 		this.end_date = end_date;
-		this.teams = new ArrayList<Team>();
-		this.nikoNikos = new ArrayList<NikoNiko>();
 	}
 
 	public Project() {
 		super(Project.TABLE, Project.FIELDS);
-		this.nikoNikos = new ArrayList<NikoNiko>();
-		this.teams = new ArrayList<Team>();
 	}
 }

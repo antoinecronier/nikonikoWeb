@@ -2,26 +2,44 @@ package com.tactfactory.nikonikoweb.models;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
 import com.tactfactory.nikonikoweb.models.base.DatabaseItem;
 
+@Entity
+@Table(name = "nikoniko_nikoniko")
 public class NikoNiko extends DatabaseItem {
 
+	@Transient
 	public static final String TABLE = "nikoniko";
+
+	@Transient
 	public static final String[] FIELDS = { "id", "log_Date", "change_Date", "satisfaction", "nikoniko_comment",
 			"isanonymous", "id_User", "id_Project" };
 
+	@Column(name = "nikoniko_log_date", nullable = false)
 	private Date log_date;
 
+	@Column(name = "nikoniko_change_date", nullable = true)
 	private Date change_date;
 
+	@Column(name = "nikoniko_satisfaction")
 	private Integer satisfaction;
 
+	@Column(name = "nikoniko_comment", nullable = true)
 	private String comment;
 
+	@Column(name = "nikoniko_is_anonymous")
 	private Boolean isAnonymous;
 
+	@ManyToOne
 	private User user;
 
+	@ManyToOne
 	private Project project;
 
 	/**

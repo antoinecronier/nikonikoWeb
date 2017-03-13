@@ -1,17 +1,33 @@
 package com.tactfactory.nikonikoweb.models;
 
 import java.security.InvalidParameterException;
-import java.util.ArrayList;
+import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.tactfactory.nikonikoweb.models.security.SecurityUser;
 
+@Entity
+@Table(name = "nikoniko_user")
 public class User extends SecurityUser {
 
+	@Transient
     public static final char SEX_MALE = 'M';
+
+	@Transient
     public static final char SEX_FEMALE = 'F';
+
+	@Transient
     public static final char SEX_UNDEFINNED = 'U';
 
+    @Transient
 	public static final String TABLE = "user";
+
+    @Transient
 	public static final String[] FIELDS = { "id", "login", "password", "sex", "lastname", "firstname",
 			"registration_cgi" };
 
@@ -21,9 +37,11 @@ public class User extends SecurityUser {
 
 	private String registration_cgi;
 
-	private ArrayList<NikoNiko> nikoNikos;
+	@OneToMany
+	private Set<NikoNiko> nikonikos;
 
-	private ArrayList<Team> teams;
+	@ManyToMany
+	private Set<Team> teams;
 
 	private char sex;
 
@@ -98,22 +116,22 @@ public class User extends SecurityUser {
 	/**
 	 * @return the nikoNikos
 	 */
-	public ArrayList<NikoNiko> getNikoNikos() {
-		return nikoNikos;
+	public Set<NikoNiko> getNikoNikos() {
+		return nikonikos;
 	}
 
 	/**
 	 * @param nikoNikos
 	 *            the nikoNikos to set
 	 */
-	public void setNikoNikos(ArrayList<NikoNiko> nikoNikos) {
-		this.nikoNikos = nikoNikos;
+	public void setNikoNikos(Set<NikoNiko> nikoNikos) {
+		this.nikonikos = nikoNikos;
 	}
 
 	/**
 	 * @return the teams
 	 */
-	public ArrayList<Team> getTeams() {
+	public Set<Team> getTeams() {
 		return teams;
 	}
 
@@ -121,7 +139,7 @@ public class User extends SecurityUser {
 	 * @param teams
 	 *            the teams to set
 	 */
-	public void setTeams(ArrayList<Team> teams) {
+	public void setTeams(Set<Team> teams) {
 		this.teams = teams;
 	}
 
@@ -130,14 +148,10 @@ public class User extends SecurityUser {
 		this.lastname = lastname;
 		this.firstname = firstname;
 		this.registration_cgi = registration_cgi;
-		this.nikoNikos = new ArrayList<NikoNiko>();
-		this.teams = new ArrayList<Team>();
 	}
 
 	public User() {
 		super(User.TABLE, User.FIELDS);
-		this.nikoNikos = new ArrayList<NikoNiko>();
-		this.teams = new ArrayList<Team>();
 	}
 
 	public User(String firstname, String lastname) {
@@ -149,7 +163,5 @@ public class User extends SecurityUser {
 		this.lastname = lastname;
 		this.firstname = firstname;
 		this.sex = sex;
-		this.nikoNikos = new ArrayList<NikoNiko>();
-		this.teams = new ArrayList<Team>();
 	}
 }

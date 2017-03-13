@@ -1,10 +1,26 @@
 package com.tactfactory.nikonikoweb.models.base;
 
-public abstract class DatabaseItem {
+import java.io.Serializable;
 
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.Transient;
+
+@MappedSuperclass
+public abstract class DatabaseItem implements Serializable {
+
+	@Transient
 	public String table;
+
+	@Transient
 	public String[] fields;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
 	/**
