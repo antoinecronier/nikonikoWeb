@@ -13,15 +13,16 @@ import javax.persistence.Transient;
 import com.tactfactory.nikonikoweb.models.base.DatabaseItem;
 
 @Entity
-@Table(name = "nikoniko_project")
+@Table(name = "project")
 public class Project extends DatabaseItem {
 
 	@Transient
 	public static final String TABLE = "project";
 
 	@Transient
-	public static final String[] FIELDS = { "id", "name", "start_Date", "end_Date" };
+	public static final String[] FIELDS = { "id", "name", "start_date", "end_date" };
 
+	@Column(nullable = false)
 	private String name;
 
 	@Column(nullable = true)

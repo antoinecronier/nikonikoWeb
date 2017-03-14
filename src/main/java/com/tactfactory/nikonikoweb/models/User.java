@@ -3,6 +3,7 @@ package com.tactfactory.nikonikoweb.models;
 import java.security.InvalidParameterException;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
@@ -12,7 +13,7 @@ import javax.persistence.Transient;
 import com.tactfactory.nikonikoweb.models.security.SecurityUser;
 
 @Entity
-@Table(name = "nikoniko_user")
+@Table(name = "user")
 public class User extends SecurityUser {
 
 	@Transient
@@ -31,10 +32,13 @@ public class User extends SecurityUser {
 	public static final String[] FIELDS = { "id", "login", "password", "sex", "lastname", "firstname",
 			"registration_cgi" };
 
+    @Column(nullable = false)
 	private String lastname;
 
+    @Column(nullable = false)
 	private String firstname;
 
+    @Column(nullable = false)
 	private String registration_cgi;
 
 	@OneToMany

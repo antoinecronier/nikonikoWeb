@@ -11,29 +11,29 @@ import javax.persistence.Transient;
 import com.tactfactory.nikonikoweb.models.base.DatabaseItem;
 
 @Entity
-@Table(name = "nikoniko_nikoniko")
+@Table(name = "nikoniko")
 public class NikoNiko extends DatabaseItem {
 
 	@Transient
 	public static final String TABLE = "nikoniko";
 
 	@Transient
-	public static final String[] FIELDS = { "id", "log_Date", "change_Date", "satisfaction", "nikoniko_comment",
-			"isanonymous", "id_User", "id_Project" };
+	public static final String[] FIELDS = { "id", "log_date", "change_date", "satisfaction", "comment",
+			"isAnonymous", "user_id", "project_id" };
 
-	@Column(name = "nikoniko_log_date", nullable = false)
+	@Column(name = "log_date", nullable = false)
 	private Date log_date;
 
-	@Column(name = "nikoniko_change_date", nullable = true)
+	@Column(name = "change_date", nullable = true)
 	private Date change_date;
 
-	@Column(name = "nikoniko_satisfaction")
+	@Column(name = "satisfaction", nullable = false)
 	private Integer satisfaction;
 
 	@Column(name = "nikoniko_comment", nullable = true)
 	private String comment;
 
-	@Column(name = "nikoniko_is_anonymous")
+	@Column(name = "isanonymous", nullable = false)
 	private Boolean isAnonymous;
 
 	@ManyToOne

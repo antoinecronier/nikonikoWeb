@@ -2,6 +2,7 @@ package com.tactfactory.nikonikoweb.models;
 
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
@@ -10,7 +11,7 @@ import javax.persistence.Transient;
 import com.tactfactory.nikonikoweb.models.base.DatabaseItem;
 
 @Entity
-@Table(name = "nikoniko_team")
+@Table(name = "team")
 public class Team extends DatabaseItem {
 
 	@Transient
@@ -19,8 +20,10 @@ public class Team extends DatabaseItem {
 	@Transient
 	public static final String[] FIELDS = { "id", "name", "serial" };
 
+	@Column(nullable = false)
 	private String name;
 
+	@Column(nullable = false)
 	private String serial;
 
 	@ManyToMany

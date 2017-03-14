@@ -71,7 +71,7 @@ public class DatabaseConfig {
 	}
 
 	@Bean
-	public PersistenceExceptionTranslationPostProcessor exceptionTranslation(){
+	public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
 		return new PersistenceExceptionTranslationPostProcessor();
 	}
 }
