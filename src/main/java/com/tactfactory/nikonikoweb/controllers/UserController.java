@@ -12,6 +12,6 @@ public class UserController extends ViewBaseController<User>{
 	public final static String BASE_URL = "/user";
 
 	public UserController() {
-		super(User.class);
+		super(User.class, BASE_URL);
 	}
 }

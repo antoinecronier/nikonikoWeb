@@ -12,6 +12,6 @@ public class ProjectController extends ViewBaseController<Project>{
 	public final static String BASE_URL = "/project";
 
 	public ProjectController() {
-		super(Project.class);
+		super(Project.class, BASE_URL);
 	}
 }
