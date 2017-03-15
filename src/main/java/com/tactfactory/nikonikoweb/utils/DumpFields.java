@@ -273,9 +273,9 @@ public class DumpFields {
 		return classes;
 	}
 
-	public static <T> T createContentsWithId(Integer id, Class<T> clazz) {
+	public static <T> T createContentsWithId(Long id, Class<T> clazz) {
 		try {
-			return clazz.getConstructor(Integer.class).newInstance(id);
+			return clazz.getConstructor(Long.class).newInstance(id);
 		} catch (InstantiationException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {

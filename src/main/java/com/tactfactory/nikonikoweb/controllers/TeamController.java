@@ -1,23 +1,17 @@
 package com.tactfactory.nikonikoweb.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.tactfactory.nikonikoweb.dao.ITeamCrudRepository;
+import com.tactfactory.nikonikoweb.controllers.base.view.ViewBaseController;
 import com.tactfactory.nikonikoweb.models.Team;
 
 @Controller
-@RequestMapping("/team")
-public class TeamController {
+@RequestMapping(TeamController.BASE_URL)
+public class TeamController extends ViewBaseController<Team>{
 
-	@RequestMapping(path="/", method = RequestMethod.GET)
-	public String index(){
+	public final static String BASE_URL = "/team";
 
-		return "team/index";
+	public TeamController() {
+		super(Team.class);
 	}
-
-	@Autowired
-	private ITeamCrudRepository teamCrud;
 }

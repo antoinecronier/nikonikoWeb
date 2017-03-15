@@ -1,23 +1,17 @@
 package com.tactfactory.nikonikoweb.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.tactfactory.nikonikoweb.dao.IProjectCrudRepository;
+import com.tactfactory.nikonikoweb.controllers.base.view.ViewBaseController;
 import com.tactfactory.nikonikoweb.models.Project;
 
 @Controller
-@RequestMapping("/project")
-public class ProjectController {
+@RequestMapping(ProjectController.BASE_URL)
+public class ProjectController extends ViewBaseController<Project>{
 
-	@RequestMapping(path="/", method = RequestMethod.GET)
-	public String index(){
+	public final static String BASE_URL = "/project";
 
-		return "project/index";
+	public ProjectController() {
+		super(Project.class);
 	}
-
-	@Autowired
-	private IProjectCrudRepository projectCrud;
 }

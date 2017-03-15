@@ -1,23 +1,17 @@
 package com.tactfactory.nikonikoweb.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import com.tactfactory.nikonikoweb.dao.IUserCrudRepository;
+import com.tactfactory.nikonikoweb.controllers.base.view.ViewBaseController;
 import com.tactfactory.nikonikoweb.models.User;
 
 @Controller
-@RequestMapping("/user")
-public class UserController {
+@RequestMapping(UserController.BASE_URL)
+public class UserController extends ViewBaseController<User>{
 
-	@RequestMapping(path={"/",""}, method = RequestMethod.GET)
-	public String index(){
+	public final static String BASE_URL = "/user";
 
-		return "user/index";
+	public UserController() {
+		super(User.class);
 	}
-
-	@Autowired
-	private IUserCrudRepository userCrud;
 }
