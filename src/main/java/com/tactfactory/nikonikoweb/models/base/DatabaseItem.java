@@ -21,12 +21,12 @@ public abstract class DatabaseItem implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long id;
+	private Long id;
 
 	/**
 	 * @return the id
 	 */
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
@@ -34,11 +34,11 @@ public abstract class DatabaseItem implements Serializable {
 	 * @param id
 	 *            the id to set
 	 */
-	public void setId(long id) {
+	public void setId(Long id) {
 		if (id>0){
 			this.id = id;
 		}else {
-			this.id = 0;
+			this.id = null;
 		}
 
 	}

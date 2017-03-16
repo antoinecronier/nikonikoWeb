@@ -51,7 +51,11 @@ public class DumpFields {
 
 		fields = superClass.getDeclaredFields();
 
-		while (superClass.getSuperclass() != DatabaseItem.class
+		for (Field field : fields) {
+			attributs.add(field);
+		}
+
+		while (superClass.getSuperclass() != Object.class
 				&& superClass.getSuperclass() != Object.class) {
 			superClass = superClass.getSuperclass();
 			fields = superClass.getDeclaredFields();
@@ -206,16 +210,30 @@ public class DumpFields {
 		return listMap;
 	}
 
-	public static <T> ArrayList<Map<Map<String, Object>, String>> listFielderAdvance(List<T> items) {
-		ArrayList<Map<Map<String,Object>, String>> listMap = new ArrayList<Map<Map<String,Object>,String>>();
-		for (T item : items) {
-			Map<String, Object> fields = DumpFields.fielder(item);
-			Map<Map<String,Object>, String> tempMap = new HashMap<Map<String,Object>, String>();
-			for (Entry<String, Object> field : fields.entrySet()) {
-				Map<String, Object> tempField = new HashMap<String, Object>();
-				tempField.put(field.getKey(), field.getValue());
-				tempMap.putIfAbsent(tempField, ((Field)field.getValue()).getType().getName());
+	public static <T> Map<String,Map<String, Object>> fielderAdvance(T item, Class klazz) {
+		Map<String, Object> fields = DumpFields.fielder(item);
+		Map<String,Map<String,Object>> tempMap = new HashMap<String, Map<String,Object>>();
+		ArrayList<Field> realFields = getFields(klazz);
+		for (Entry<String, Object> field : fields.entrySet()) {
+			Map<String, Object> tempField = new HashMap<String, Object>();
+			tempField.put("value", field.getValue());
+			for (Field realField : realFields) {
+				if (realField.getName().equals(field.getKey())) {
+					tempField.put("type", realField.getType().getSimpleName());
+				}
 			}
+
+			tempMap.put(field.getKey(), tempField);
+		}
+
+		return tempMap;
+	}
+
+	public static <T> ArrayList<Map<Map<String, Object>, String>> listFielderAdvance(List<T> items, Class klazz) {
+		ArrayList<Map<Map<String,Object>, String>> listMap = new ArrayList<Map<Map<String,Object>,String>>();
+		Map<Map<String,Object>, String> tempMap = new HashMap<Map<String,Object>, String>();
+		for (T item : items) {
+			fielderAdvance(item, klazz);
 			listMap.add(tempMap);
 		}
 		return listMap;

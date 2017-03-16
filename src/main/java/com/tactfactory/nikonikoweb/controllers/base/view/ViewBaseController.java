@@ -71,6 +71,7 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 	public String createItemGet(Model model) {
 		model.addAttribute("page", this.baseName + " " + CREATE_ACTION);
 		model.addAttribute("fields", DumpFields.createContentsEmpty(super.getClazz()).fields);
+		model.addAttribute("currentItem", DumpFields.fielderAdvance(DumpFields.createContentsEmpty(super.getClazz()),super.getClazz()));
 		return createView;
 	}
 
