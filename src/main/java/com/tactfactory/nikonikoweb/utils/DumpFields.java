@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -200,6 +202,21 @@ public class DumpFields {
 		ArrayList<Map<String, Object>> listMap = new ArrayList<Map<String, Object>>();
 		for (T item : items) {
 			listMap.add(DumpFields.fielder(item));
+		}
+		return listMap;
+	}
+
+	public static <T> ArrayList<Map<Map<String, Object>, String>> listFielderAdvance(List<T> items) {
+		ArrayList<Map<Map<String,Object>, String>> listMap = new ArrayList<Map<Map<String,Object>,String>>();
+		for (T item : items) {
+			Map<String, Object> fields = DumpFields.fielder(item);
+			Map<Map<String,Object>, String> tempMap = new HashMap<Map<String,Object>, String>();
+			for (Entry<String, Object> field : fields.entrySet()) {
+				Map<String, Object> tempField = new HashMap<String, Object>();
+				tempField.put(field.getKey(), field.getValue());
+				tempMap.putIfAbsent(tempField, ((Field)field.getValue()).getType().getName());
+			}
+			listMap.add(tempMap);
 		}
 		return listMap;
 	}

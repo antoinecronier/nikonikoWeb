@@ -12,14 +12,29 @@
     <h1>${page}</h1>
     <form action="" method="POST">
         <#list fields as field>
-            <#if field != "id">
-                <br>
-                    Name:${field}
-                    <input type="text"
-                        name="${field}"
-                        value="" />
-                </br>
-            </#if>
+            <#list currentItem?keys as key>
+                <#if field == key>
+                    <#if field != "id">
+                        <#if currentItem[key]?is_datetime>
+                            <br>
+                                Name:${key}
+                                <input type="text"
+                                    name="${key}"
+                                    value="" />
+                                <input id="${key}date" type="date" value="${currentItem[key]?string("YYYY-MM-DD")}">
+                                <input id="${key}time" type="time" value="${currentItem[key]?time}">
+                            </br>
+                        <#else>
+                            <br>
+                                Name:${key}
+                                <input type="text"
+                                    name="${key}"
+                                    value="" />
+                            </br>
+                        </#if>
+                    </#if>
+                </#if>
+            </#list>
         </#list>
         <br>
             <input type="submit" value="submit"/>

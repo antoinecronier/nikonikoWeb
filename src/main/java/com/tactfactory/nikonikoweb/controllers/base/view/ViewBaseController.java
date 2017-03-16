@@ -62,6 +62,7 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 	@RequestMapping(path = ROUTE_SHOW, method = RequestMethod.GET)
 	public String itemGet(@PathVariable Long id, Model model) {
 		model.addAttribute("page", this.baseName + " " + SHOW_ACTION);
+		model.addAttribute("fields", DumpFields.createContentsEmpty(super.getClazz()).fields);
 		model.addAttribute("currentItem", DumpFields.fielder(super.getItem(id)));
 		return showView;
 	}
@@ -88,6 +89,7 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 	@RequestMapping(path = ROUTE_UPDATE, method = RequestMethod.GET)
 	public String updateItemGet(@PathVariable Long id, Model model) {
 		model.addAttribute("page", this.baseName + " " + UPDATE_ACTION);
+		model.addAttribute("fields", DumpFields.createContentsEmpty(super.getClazz()).fields);
 		model.addAttribute("currentItem", DumpFields.fielder(super.getItem(id)));
 		return updateView;
 	}
@@ -103,6 +105,7 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 	@RequestMapping(path = ROUTE_DELETE, method = RequestMethod.GET)
 	public String deleteItemGet(@PathVariable Long id, Model model) {
 		model.addAttribute("page", this.baseName + " " + DELETE_ACTION);
+		model.addAttribute("fields", DumpFields.createContentsEmpty(super.getClazz()).fields);
 		model.addAttribute("currentItem", DumpFields.fielder(super.getItem(id)));
 		return deleteView;
 	}

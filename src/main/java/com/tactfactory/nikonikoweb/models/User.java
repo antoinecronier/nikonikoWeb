@@ -47,7 +47,7 @@ public class User extends SecurityUser {
 	@ManyToMany
 	private Set<Team> teams;
 
-	private char sex;
+	private Character sex;
 
 	/**
 	 * @return the lastname
@@ -59,7 +59,7 @@ public class User extends SecurityUser {
 	/**
 	 * @return the sex
 	 */
-	public char getSex() {
+	public Character getSex() {
 		return sex;
 	}
 
@@ -67,7 +67,7 @@ public class User extends SecurityUser {
 	 * @param sex
 	 *            the sex to set
 	 */
-	public void setSex(char sex) {
+	public void setSex(Character sex) {
 	    switch (sex) {
 	    case User.SEX_MALE:
 	    case User.SEX_FEMALE:
