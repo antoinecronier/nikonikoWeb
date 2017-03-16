@@ -7,23 +7,22 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/custom.css"/>
 
-<script src="http://code.jquery.com/jquery-3.0.0.min.js"></script>
+    <script src="http://code.jquery.com/jquery-3.0.0.min.js"></script>
 
-
-<script>
-$(document).ready(function(){
-<#list currentItem?keys as key>
-    <#if currentItem[key]?is_datetime>
-        $("#${key}date").change(function(){
-            $("#${key}").val($("#${key}date").val().replace(/\-/g,"/") + " " + $("#${key}time").val());
+    <script>
+        $(document).ready(function(){
+        <#list currentItem?keys as key>
+            <#if currentItem[key]?is_datetime>
+                $("#${key}date").change(function(){
+                    $("#${key}").val($("#${key}date").val().replace(/\-/g,"/") + " " + $("#${key}time").val());
+                });
+                $("#${key}time").change(function(){
+                    $("#${key}").val($("#${key}date").val().replace(/\-/g,"/") + " " + $("#${key}time").val());
+                });
+            </#if>
+        </#list>
         });
-        $("#${key}time").change(function(){
-            $("#${key}").val($("#${key}date").val().replace(/\-/g,"/") + " " + $("#${key}time").val());
-        });
-    </#if>
-</#list>
-});
-</script>
+    </script>
 
 </head>
 <html>

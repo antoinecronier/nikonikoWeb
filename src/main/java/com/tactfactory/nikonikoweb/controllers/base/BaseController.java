@@ -16,7 +16,7 @@ public abstract class BaseController <T extends DatabaseItem> {
 	public final static String DELETE_ACTION = "delete";
 	public final static String LIST_ACTION = "list";
 
-	public final static String REDIRECT = "redirect:/";
+	public final static String REDIRECT = "redirect:";
 
 	public final static String PATH = "/";
 	public final static String PATH_SHOW_FILE = PATH + SHOW_ACTION;

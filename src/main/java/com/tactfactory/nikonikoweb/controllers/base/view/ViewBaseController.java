@@ -43,11 +43,11 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 		this.showView = this.baseView + PATH_SHOW_FILE;
 		this.listView = this.baseView + PATH_LIST_FILE;
 
-		this.createRedirect = REDIRECT + this.baseName + PATH_LIST_FILE;
-		this.deleteRedirect = REDIRECT + this.baseName + PATH_LIST_FILE;
-		this.updateRedirect = REDIRECT + this.baseName + PATH_LIST_FILE;
-		this.showRedirect = REDIRECT + this.baseName + PATH_LIST_FILE;
-		this.listRedirect = REDIRECT + this.baseName + PATH_LIST_FILE;
+		this.createRedirect = REDIRECT + this.baseName + PATH + ROUTE_LIST;
+		this.deleteRedirect = REDIRECT + this.baseName + PATH + ROUTE_LIST;
+		this.updateRedirect = REDIRECT + this.baseName + PATH + ROUTE_LIST;
+		this.showRedirect = REDIRECT + this.baseName + PATH + ROUTE_LIST;
+		this.listRedirect = REDIRECT + this.baseName + PATH + ROUTE_LIST;
 	}
 
 	@RequestMapping(value = { PATH, ROUTE_LIST }, method = RequestMethod.GET)
@@ -62,7 +62,8 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 	@RequestMapping(path = ROUTE_SHOW, method = RequestMethod.GET)
 	public String itemGet(@PathVariable Long id, Model model) {
 		model.addAttribute("page", this.baseName + " " + SHOW_ACTION);
-		model.addAttribute("fields", DumpFields.createContentsEmpty(super.getClazz()).fields);
+		model.addAttribute("fields",
+				DumpFields.createContentsEmpty(super.getClazz()).fields);
 		model.addAttribute("currentItem", DumpFields.fielder(super.getItem(id)));
 		return showView;
 	}
@@ -70,8 +71,13 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 	@RequestMapping(path = ROUTE_CREATE, method = RequestMethod.GET)
 	public String createItemGet(Model model) {
 		model.addAttribute("page", this.baseName + " " + CREATE_ACTION);
-		model.addAttribute("fields", DumpFields.createContentsEmpty(super.getClazz()).fields);
-		model.addAttribute("currentItem", DumpFields.fielderAdvance(DumpFields.createContentsEmpty(super.getClazz()),super.getClazz()));
+		model.addAttribute("fields",
+				DumpFields.createContentsEmpty(super.getClazz()).fields);
+		model.addAttribute(
+				"currentItem",
+				DumpFields.fielderAdvance(
+						DumpFields.createContentsEmpty(super.getClazz()),
+						super.getClazz()));
 		return createView;
 	}
 
@@ -82,40 +88,36 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		model.addAttribute("fields", DumpFields.createContentsEmpty(super.getClazz()).fields);
-		model.addAttribute("items", super.getItems());
 		return createRedirect;
 	}
 
 	@RequestMapping(path = ROUTE_UPDATE, method = RequestMethod.GET)
 	public String updateItemGet(@PathVariable Long id, Model model) {
 		model.addAttribute("page", this.baseName + " " + UPDATE_ACTION);
-		model.addAttribute("fields", DumpFields.createContentsEmpty(super.getClazz()).fields);
+		model.addAttribute("fields",
+				DumpFields.createContentsEmpty(super.getClazz()).fields);
 		model.addAttribute("currentItem", DumpFields.fielder(super.getItem(id)));
 		return updateView;
 	}
 
 	@RequestMapping(path = ROUTE_UPDATE, method = RequestMethod.POST)
-	public String updateItemPost(@ModelAttribute T item, Model model) {
+	public String updateItemPost(@ModelAttribute T item) {
 		super.updateItem(item);
-		model.addAttribute("fields", DumpFields.createContentsEmpty(super.getClazz()).fields);
-		model.addAttribute("items", super.getItems());
 		return updateRedirect;
 	}
 
 	@RequestMapping(path = ROUTE_DELETE, method = RequestMethod.GET)
 	public String deleteItemGet(@PathVariable Long id, Model model) {
 		model.addAttribute("page", this.baseName + " " + DELETE_ACTION);
-		model.addAttribute("fields", DumpFields.createContentsEmpty(super.getClazz()).fields);
+		model.addAttribute("fields",
+				DumpFields.createContentsEmpty(super.getClazz()).fields);
 		model.addAttribute("currentItem", DumpFields.fielder(super.getItem(id)));
 		return deleteView;
 	}
 
 	@RequestMapping(path = ROUTE_DELETE, method = RequestMethod.POST)
-	public String deleteItemPost(@PathVariable Long id, Model model) {
+	public String deleteItemPost(@PathVariable Long id) {
 		super.deleteItem(id);
-		model.addAttribute("fields", DumpFields.createContentsEmpty(super.getClazz()).fields);
-		model.addAttribute("items", super.getItems());
 		return deleteRedirect;
 	}
 }
