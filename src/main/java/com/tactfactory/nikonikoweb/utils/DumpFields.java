@@ -5,6 +5,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.io.File;
 import java.io.IOException;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.stream.Collectors;
+
+import org.hibernate.mapping.ManyToOne;
 
 import com.tactfactory.nikonikoweb.models.base.DatabaseItem;
 
@@ -210,17 +213,39 @@ public class DumpFields {
 		return listMap;
 	}
 
-	public static <T> Map<String,Map<String, Object>> fielderAdvance(T item, Class klazz) {
+	public static <T> Map<String,Map<String, Object>> fielderAdvance(Object item, Class klazz) {
 		Map<String, Object> fields = DumpFields.fielder(item);
 		Map<String,Map<String,Object>> tempMap = new HashMap<String, Map<String,Object>>();
 		ArrayList<Field> realFields = getFields(klazz);
 		for (Entry<String, Object> field : fields.entrySet()) {
 			Map<String, Object> tempField = new HashMap<String, Object>();
 			tempField.put("value", field.getValue());
+
+			Field realFieldSelected = null;
+
 			for (Field realField : realFields) {
 				if (realField.getName().equals(field.getKey())) {
 					tempField.put("type", realField.getType().getSimpleName());
+					realFieldSelected = realField;
+					break;
 				}
+			}
+
+			if (realFieldSelected.getAnnotation(javax.persistence.ManyToOne.class) != null) {
+				javax.persistence.ManyToOne annotation = realFieldSelected.getAnnotation(javax.persistence.ManyToOne.class);
+				tempField.put("ManyToOne",annotation.targetEntity().getName());
+			}
+			if (realFieldSelected.getAnnotation(javax.persistence.ManyToMany.class) != null) {
+				javax.persistence.ManyToMany annotation = realFieldSelected.getAnnotation(javax.persistence.ManyToMany.class);
+				tempField.put("ManyToMany",annotation.targetEntity().getName());
+			}
+			if (realFieldSelected.getAnnotation(javax.persistence.OneToMany.class) != null) {
+				javax.persistence.OneToMany annotation = realFieldSelected.getAnnotation(javax.persistence.OneToMany.class);
+				tempField.put("OneToMany",annotation.targetEntity().getName());
+			}
+			if (realFieldSelected.getAnnotation(javax.persistence.OneToOne.class) != null) {
+				javax.persistence.OneToOne annotation = realFieldSelected.getAnnotation(javax.persistence.OneToOne.class);
+				tempField.put("OneToOne",annotation.targetEntity().getName());
 			}
 
 			tempMap.put(field.getKey(), tempField);
@@ -229,9 +254,10 @@ public class DumpFields {
 		return tempMap;
 	}
 
-	public static <T> ArrayList<Map<Map<String, Object>, String>> listFielderAdvance(List<T> items, Class klazz) {
-		ArrayList<Map<Map<String,Object>, String>> listMap = new ArrayList<Map<Map<String,Object>,String>>();
-		Map<Map<String,Object>, String> tempMap = new HashMap<Map<String,Object>, String>();
+	public static <T> ArrayList<Map<Map<String, Object>, String>> listFielderAdvance(
+			List<T> items, Class klazz) {
+		ArrayList<Map<Map<String, Object>, String>> listMap = new ArrayList<Map<Map<String, Object>, String>>();
+		Map<Map<String, Object>, String> tempMap = new HashMap<Map<String, Object>, String>();
 		for (T item : items) {
 			fielderAdvance(item, klazz);
 			listMap.add(tempMap);

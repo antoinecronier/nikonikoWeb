@@ -12,12 +12,17 @@
     <script>
         $(document).ready(function(){
         <#list currentItem?keys as key>
-            <#if currentItem[key]?is_datetime>
+            <#assign subItem = currentItem[key]>
+            <#if subItem['type'] = "Date">
                 $("#${key}date").change(function(){
                     $("#${key}").val($("#${key}date").val().replace(/\-/g,"/") + " " + $("#${key}time").val());
                 });
                 $("#${key}time").change(function(){
                     $("#${key}").val($("#${key}date").val().replace(/\-/g,"/") + " " + $("#${key}time").val());
+                });
+            <#elseif subItem['type'] == "Boolean">
+                $("#${key}checkbox").change(function(){
+                    $("#${key}").val($("#${key}checkbox").is(':checked') ? "true" : "false");
                 });
             </#if>
         </#list>
@@ -40,27 +45,42 @@
     <form id="updateForm" action="" method="POST">
         <#list fields as field>
             <#list currentItem?keys as key>
+                <#assign subItem = currentItem[key]>
                 <#if key == field>
                     <#if key != "id">
-                        <#if currentItem[key]?is_boolean>
-                            <br>${key} :
-                                <input type="text" name="${key}" value="${currentItem[key]?c}">
-                            </br>
-                        <#elseif currentItem[key]?is_sequence>
+                        <#if subItem['type']?is_sequence>
                             <br>Sequence</br>
-                        <#elseif currentItem[key]?is_datetime>
+                        <#elseif subItem['type'] = "Date">
                             <br>${key} :
-                                <input id="${key}" type="datetime" name="${key}" readonly value="${currentItem[key]?string("yyyy/MM/dd HH:mm:ss")}">
-                                <input id="${key}date" type="date" value="${currentItem[key]?string("YYYY-MM-DD")}">
-                                <input id="${key}time" type="time" value="${currentItem[key]?time}">
+                                <#if subItem['value']?is_date>
+                                    <input id="${key}" type="datetime" name="${key}" readonly value="${subItem['value']?string("yyyy/MM/dd HH:mm:ss")}">
+                                    <input id="${key}date" type="date" value="${subItem['value']?string("YYYY-MM-DD")}">
+                                    <input id="${key}time" type="time" value="${subItem['value']?time}">
+                                <#else>
+                                    <input id="${key}" type="datetime" name="${key}" readonly value="">
+                                    <input id="${key}date" type="date" value="">
+                                    <input id="${key}time" type="time" value="">
+                                </#if>
+
+                            </br>
+                        <#elseif subItem['type'] == "Long" || subItem['type'] == "Integer">
+                            <br>${key} :
+                                <input type="number" name="${key}" value="${subItem['value']}">
+                            </br>
+                        <#elseif subItem['type'] = "Boolean">
+                            <br>${key} :
+                                <input id="${key}checkbox" type="checkbox"
+                                    name="${key}checkbox" value="${subItem['value']?c}"
+                                    <#if subItem['value']?c = "true"> checked="true"</#if>>
+                                <input id="${key}" type="hidden" name="${key}" value="${subItem['value']?c}}">
                             </br>
                         <#else>
                             <br>${key} :
-                                <input type="text" name="${key}" value="${currentItem[key]}">
+                                <input type="text" name="${key}" value="${subItem['value']}">
                             </br>
                         </#if>
                     <#else>
-                        <input type="hidden" name="id" value="${currentItem[key]}">
+                        <input type="hidden" name="id" value="${subItem['value']}">
                     </#if>
                 </#if>
             </#list>
