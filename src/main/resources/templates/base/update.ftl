@@ -21,6 +21,15 @@
                 });
             </#if>
         </#list>
+            $( "#updateForm" ).submit(function( event ) {
+                $("#updateForm").each(function(index) {
+                    $(this).children().each (function() {
+                        if($(this).val() == ""){
+                            $(this).prop('disabled', true);
+                        }
+                    });
+                });
+            });
         });
     </script>
 
@@ -28,7 +37,7 @@
 <html>
 <body>
     <h1>${page}</h1>
-    <form action="" method="POST">
+    <form id="updateForm" action="" method="POST">
         <#list fields as field>
             <#list currentItem?keys as key>
                 <#if key == field>
