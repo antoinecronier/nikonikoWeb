@@ -14,4 +14,9 @@ public class NikoNikoController extends ViewBaseController<NikoNiko>{
 	public NikoNikoController() {
 		super(NikoNiko.class, BASE_URL);
 	}
+
+	@RequestMapping("create/advance")
+	public String nikonikoCreate(){
+		return "";
+	}
 }
