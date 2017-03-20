@@ -5,8 +5,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import com.tactfactory.nikonikoweb.controllers.base.BaseController;
 import com.tactfactory.nikonikoweb.models.base.DatabaseItem;
 import com.tactfactory.nikonikoweb.utils.DumpFields;
@@ -14,11 +12,10 @@ import com.tactfactory.nikonikoweb.utils.DumpFields;
 public abstract class ViewBaseController<T extends DatabaseItem> extends
 		BaseController<T> {
 
-	private String baseName;
+	protected String baseName;
 
 	protected String createView;
 	protected String createRedirect;
-	protected String createAssociationRedirect;
 
 	protected String deleteView;
 	protected String deleteRedirect;
@@ -50,8 +47,6 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 		this.updateRedirect = REDIRECT + this.baseName + PATH + ROUTE_LIST;
 		this.showRedirect = REDIRECT + this.baseName + PATH + ROUTE_LIST;
 		this.listRedirect = REDIRECT + this.baseName + PATH + ROUTE_LIST;
-
-		this.createAssociationRedirect = REDIRECT + this.baseName + PATH + CREATE_ACTION;
 	}
 
 	@RequestMapping(value = { PATH, ROUTE_LIST }, method = RequestMethod.GET)
@@ -72,35 +67,6 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 		return showView;
 	}
 
-	@RequestMapping(path = ROUTE_CREATE, method = RequestMethod.GET)
-	public String createItemGet(Model model) {
-		model.addAttribute("page", this.baseName + " " + CREATE_ACTION);
-		model.addAttribute("fields",
-				DumpFields.createContentsEmpty(super.getClazz()).fields);
-		model.addAttribute(
-				"currentItem",
-				DumpFields.fielderAdvance(
-						DumpFields.createContentsEmpty(super.getClazz()),
-						super.getClazz()));
-		model.addAttribute("createAssociationRedirect",createAssociationRedirect);
-		model.addAttribute("routeCreateAssociation", ROUTE_CREATE_ASSOCIATION);
-		return createView;
-	}
-
-	@RequestMapping(path = ROUTE_CREATE_ASSOCIATION, method = RequestMethod.GET)
-	public String createItemGet(Model model, @RequestParam String redirectTo) {
-		model.addAttribute("page", this.baseName + " " + CREATE_ACTION);
-		model.addAttribute("fields",
-				DumpFields.createContentsEmpty(super.getClazz()).fields);
-		model.addAttribute(
-				"currentItem",
-				DumpFields.fielderAdvance(
-						DumpFields.createContentsEmpty(super.getClazz()),
-						super.getClazz()));
-		model.addAttribute("redirectTo",redirectTo);
-		return createView;
-	}
-
 	@RequestMapping(path = ROUTE_CREATE, method = RequestMethod.POST)
 	public String createItemPost(T item, Model model) {
 		try {
@@ -109,17 +75,6 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 			e.printStackTrace();
 		}
 		return createRedirect;
-	}
-
-	@RequestMapping(path = ROUTE_CREATE_ASSOCIATION, method = RequestMethod.POST)
-	public String createItemPost(T item, Model model, String redirectTo) {
-		try {
-			super.insertItem(item);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		model.addAttribute("association",model);
-		return redirectTo;
 	}
 
 	@RequestMapping(path = ROUTE_UPDATE, method = RequestMethod.GET)
