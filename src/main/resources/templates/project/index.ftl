@@ -34,8 +34,18 @@
                         </#if>
                     </#list>
                 </#list>
-                <td><a href="${item["id"]}/teams">Teams</a></td>
-                <td><a href="${item["id"]}/teamslink">Associate Teams</a></td>
+                <td>
+                    <a href="${item["id"]}/teams">Teams</a>
+                    <br>
+                    <a href="${item["id"]}/teamslink">Associate Teams</a>
+                </td>
+
+                <td>
+                    <a href="${item["id"]}/nikonikos">NikoNikos</a>
+                    <br>
+                    <a href="${item["id"]}/nikonikoslink">Associate NikoNikos</a>
+                </td>
+
                 <td>
                     <form action="${item["id"]}/delete" method="POST">
                         <input type="hidden" name="id" value="${item["id"]}">

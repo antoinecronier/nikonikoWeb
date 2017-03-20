@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tactfactory.nikonikoweb.controllers.base.view.ViewBaseController;
+import com.tactfactory.nikonikoweb.dao.INikoNikoCrudRepository;
 import com.tactfactory.nikonikoweb.dao.IProjectCrudRepository;
 import com.tactfactory.nikonikoweb.dao.ITeamCrudRepository;
+import com.tactfactory.nikonikoweb.models.NikoNiko;
 import com.tactfactory.nikonikoweb.models.Project;
 import com.tactfactory.nikonikoweb.models.Team;
 import com.tactfactory.nikonikoweb.utils.DumpFields;
@@ -36,6 +38,9 @@ public class ProjectController extends ViewBaseController<Project> {
 
 	@Autowired
 	ITeamCrudRepository teamCrud;
+
+	@Autowired
+	INikoNikoCrudRepository nikonikoCrud;
 
 	@RequestMapping("index")
 	public String projects(Model model) {
@@ -92,5 +97,53 @@ public class ProjectController extends ViewBaseController<Project> {
 		model.addAttribute("currentItem", DumpFields.fielder(project));
 		model.addAttribute("items", DumpFields.<Team>listFielder(new ArrayList<Team>(project.getTeams())));
 		return "project/teams";
+	}
+
+	@RequestMapping(path="{projectId}/nikonikoslink", method = RequestMethod.GET)
+	public String setNikoNikosForProjectGet(Model model, @PathVariable Long projectId) {
+		Project project = super.getItem(projectId);
+
+		model.addAttribute("page", project.getName() + " nikonikos linker");
+		model.addAttribute("fields", NikoNiko.FIELDS);
+		model.addAttribute("currentItem", DumpFields.fielder(project));
+
+		List<NikoNiko> nikoNikos = (List<NikoNiko>) nikonikoCrud.findAll();
+		model.addAttribute("items", DumpFields.<NikoNiko>listFielder(nikoNikos));
+
+		ArrayList<Long> nikoNikosIds = new ArrayList<Long>();
+		for (NikoNiko nikoNiko : project.getNikoNikos()) {
+			nikoNikosIds.add(nikoNiko.getId());
+		}
+		model.addAttribute("linkedItems", nikoNikosIds);
+
+		return "project/nikonikoslink";
+	}
+
+	@RequestMapping(path="{projectId}/nikonikoslink", method = RequestMethod.POST)
+	public String setNikoNikosForProjectPost(Model model, @PathVariable Long projectId, @RequestParam(value = "ids[]") Long[] ids) {
+		Project project = super.getItem(projectId);
+
+		project.getNikoNikos().clear();
+
+		for (Long id : ids) {
+			if (id != 0) {
+				project.getNikoNikos().add(nikonikoCrud.findOne(id));
+			}
+		}
+
+		projectCrud.save(project);
+
+		return "redirect:/project/index";
+	}
+
+	@RequestMapping("{projectId}/nikonikos")
+	public String getNikoNikosForProject(Model model, @PathVariable Long projectId) {
+		Project project = super.getItem(projectId);
+
+		model.addAttribute("page", project.getName() + " nikonikos");
+		model.addAttribute("fields", NikoNiko.FIELDS);
+		model.addAttribute("currentItem", DumpFields.fielder(project));
+		model.addAttribute("items", DumpFields.<NikoNiko>listFielder(new ArrayList<NikoNiko>(project.getNikoNikos())));
+		return "project/nikonikos";
 	}
 }
