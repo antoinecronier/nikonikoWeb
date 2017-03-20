@@ -27,6 +27,7 @@ public abstract class BaseController <T extends DatabaseItem> {
 
 	public final static String ROUTE_SHOW = "{id}/" + SHOW_ACTION;
 	public final static String ROUTE_CREATE = CREATE_ACTION;
+	public final static String ROUTE_CREATE_ASSOCIATION = CREATE_ACTION + "association";
 	public final static String ROUTE_UPDATE = "{id}/" + UPDATE_ACTION;
 	public final static String ROUTE_DELETE = "{id}/" + DELETE_ACTION;
 	public final static String ROUTE_LIST = LIST_ACTION;

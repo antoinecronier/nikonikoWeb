@@ -44,7 +44,14 @@
 <html>
 <body>
     <h1>${page}</h1>
-    <form id="createForm" action="" method="POST">
+    <#if redirectTo??>
+        <form id="createForm" action="" method="POST">
+            <input type="hidden" value="${redirectTo}" />
+        </form>
+        <form id="createForm" action="" method="POST">
+    <#else>
+        <form id="createForm" action="" method="POST">
+    </#if>
         <#list fields as field>
             <#list currentItem?keys as key>
                 <#assign subItem = currentItem[key]>
@@ -89,10 +96,56 @@
                 </#if>
             </#list>
         </#list>
+        <#list currentItem?keys as key>
+            <#assign subItem = currentItem[key]>
+            <#if subItem['ManyToOne']??>
+                <#if createAssociationRedirect?? && routeCreateAssociation??>
+                    <br>
+                        ${key} : <a href="../${key}/${routeCreateAssociation}?redirectTo=${createAssociationRedirect}">Add new</a> <a href="../${key}/">Use one</a>
+                    </br>
+                </#if>
+            </#if>
+            <#if subItem['OneToMany']??>
+                <#if createAssociationRedirect??>
+                    <br>
+                        ${key} : <a href="../${key}/create?redirectTo=${createAssociationRedirect}">Use existing</a>
+                    </br>
+                </#if>
+            </#if>
+            <#if subItem['ManyToMany']??>
+                <#if createAssociationRedirect??>
+                    <br>
+                        ${key} : <a href="../${key}/create?redirectTo=${createAssociationRedirect}">Use existing</a>
+                    </br>
+                </#if>
+            </#if>
+            <#if subItem['OneToOne']??>
+                <#if createAssociationRedirect??>
+                    <br>
+                        ${key} : <a href="../${key}/${routeCreateAssociation}?redirectTo=${createAssociationRedirect}">Add new</a> <a href="../${key}/">Use one</a>
+                    </br>
+                </#if>
+            </#if>
+        </#list>
         <br>
             <input type="submit" value="submit"/>
         </br>
     </form>
+    <#list currentItem?keys as key>
+        <#assign subItem = currentItem[key]>
+            <#if subItem['ManyToOne']??>
+                <h1>${key}</h1>
+                <form id="add${key}Form" path="${key}" action="" method="POST">
+                    <#assign subCurrentItem = subItem['value']>
+                    <#list subCurrentItem?keys as subKey>
+                        <br>
+                            ${subKey}
+
+                        </br>
+                    </#list>
+                </form>
+        </#if>
+    </#list>
     <a href="list">Back</a>
 </body>
 </html>

@@ -213,9 +213,10 @@ public class DumpFields {
 		return listMap;
 	}
 
-	public static <T> Map<String,Map<String, Object>> fielderAdvance(Object item, Class klazz) {
+	public static <T> Map<String, Map<String, Object>> fielderAdvance(
+			Object item, Class klazz) {
 		Map<String, Object> fields = DumpFields.fielder(item);
-		Map<String,Map<String,Object>> tempMap = new HashMap<String, Map<String,Object>>();
+		Map<String, Map<String, Object>> tempMap = new HashMap<String, Map<String, Object>>();
 		ArrayList<Field> realFields = getFields(klazz);
 		for (Entry<String, Object> field : fields.entrySet()) {
 			Map<String, Object> tempField = new HashMap<String, Object>();
@@ -226,26 +227,76 @@ public class DumpFields {
 			for (Field realField : realFields) {
 				if (realField.getName().equals(field.getKey())) {
 					tempField.put("type", realField.getType().getSimpleName());
+					tempField.put("isbase", true);
 					realFieldSelected = realField;
 					break;
 				}
 			}
 
-			if (realFieldSelected.getAnnotation(javax.persistence.ManyToOne.class) != null) {
-				javax.persistence.ManyToOne annotation = realFieldSelected.getAnnotation(javax.persistence.ManyToOne.class);
-				tempField.put("ManyToOne",annotation.targetEntity().getName());
-			}
-			if (realFieldSelected.getAnnotation(javax.persistence.ManyToMany.class) != null) {
-				javax.persistence.ManyToMany annotation = realFieldSelected.getAnnotation(javax.persistence.ManyToMany.class);
-				tempField.put("ManyToMany",annotation.targetEntity().getName());
-			}
-			if (realFieldSelected.getAnnotation(javax.persistence.OneToMany.class) != null) {
-				javax.persistence.OneToMany annotation = realFieldSelected.getAnnotation(javax.persistence.OneToMany.class);
-				tempField.put("OneToMany",annotation.targetEntity().getName());
-			}
-			if (realFieldSelected.getAnnotation(javax.persistence.OneToOne.class) != null) {
-				javax.persistence.OneToOne annotation = realFieldSelected.getAnnotation(javax.persistence.OneToOne.class);
-				tempField.put("OneToOne",annotation.targetEntity().getName());
+			if (realFieldSelected != null) {
+				if (realFieldSelected
+						.getAnnotation(javax.persistence.ManyToOne.class) != null) {
+					javax.persistence.ManyToOne annotation = realFieldSelected
+							.getAnnotation(javax.persistence.ManyToOne.class);
+					tempField.put("ManyToOne", annotation.targetEntity()
+							.getName());
+					tempField.putIfAbsent("isbase", false);
+
+					if (field.getValue() == "") {
+						Object value = null;
+						for (Field realField : realFields) {
+							if (realField.getName().equals(field.getKey())) {
+								value = DumpFields
+										.createContentsEmpty(realField
+												.getType());
+								tempField.put(
+										"value",
+										fielderAdvance(value,
+												realField.getType()));
+								break;
+							}
+						}
+					} else {
+						for (Field realField : realFields) {
+							if (realField.getName().equals(field.getKey())) {
+								tempField.put(
+										"value",
+										fielderAdvance(field.getValue(),
+												realField.getType()));
+								break;
+							}
+						}
+					}
+				}
+
+				if (realFieldSelected
+						.getAnnotation(javax.persistence.ManyToMany.class) != null) {
+					javax.persistence.ManyToMany annotation = realFieldSelected
+							.getAnnotation(javax.persistence.ManyToMany.class);
+					tempField.put("ManyToMany", annotation.targetEntity()
+							.getName());
+					tempField.putIfAbsent("isbase", false);
+				}
+				if (realFieldSelected
+						.getAnnotation(javax.persistence.OneToMany.class) != null) {
+					javax.persistence.OneToMany annotation = realFieldSelected
+							.getAnnotation(javax.persistence.OneToMany.class);
+					tempField.put("OneToMany", annotation.targetEntity()
+							.getName());
+					tempField.putIfAbsent("isbase", false);
+				}
+				if (realFieldSelected
+						.getAnnotation(javax.persistence.OneToOne.class) != null) {
+					javax.persistence.OneToOne annotation = realFieldSelected
+							.getAnnotation(javax.persistence.OneToOne.class);
+					tempField.put("OneToOne", annotation.targetEntity()
+							.getName());
+					tempField.putIfAbsent("isbase", false);
+					tempField.put(
+							"value",
+							fielderAdvance(field.getValue(), field.getValue()
+									.getClass()));
+				}
 			}
 
 			tempMap.put(field.getKey(), tempField);
