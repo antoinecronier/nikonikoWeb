@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+
 import com.tactfactory.nikonikoweb.controllers.base.BaseController;
 import com.tactfactory.nikonikoweb.models.base.DatabaseItem;
 import com.tactfactory.nikonikoweb.utils.DumpFields;
@@ -12,7 +13,7 @@ import com.tactfactory.nikonikoweb.utils.DumpFields;
 public abstract class ViewBaseController<T extends DatabaseItem> extends
 		BaseController<T> {
 
-	protected String baseName;
+	private String baseName;
 
 	protected String createView;
 	protected String createRedirect;
@@ -65,6 +66,19 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 				DumpFields.createContentsEmpty(super.getClazz()).fields);
 		model.addAttribute("currentItem", DumpFields.fielder(super.getItem(id)));
 		return showView;
+	}
+
+	@RequestMapping(path = ROUTE_CREATE, method = RequestMethod.GET)
+	public String createItemGet(Model model) {
+		model.addAttribute("page", this.baseName + " " + CREATE_ACTION);
+		model.addAttribute("fields",
+				DumpFields.createContentsEmpty(super.getClazz()).fields);
+		model.addAttribute(
+				"currentItem",
+				DumpFields.fielderAdvance(
+						DumpFields.createContentsEmpty(super.getClazz()),
+						super.getClazz()));
+		return createView;
 	}
 
 	@RequestMapping(path = ROUTE_CREATE, method = RequestMethod.POST)
