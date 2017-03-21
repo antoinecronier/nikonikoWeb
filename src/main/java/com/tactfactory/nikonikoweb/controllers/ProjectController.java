@@ -1,7 +1,6 @@
 package com.tactfactory.nikonikoweb.controllers;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +19,6 @@ import com.tactfactory.nikonikoweb.models.NikoNiko;
 import com.tactfactory.nikonikoweb.models.Project;
 import com.tactfactory.nikonikoweb.models.Team;
 import com.tactfactory.nikonikoweb.utils.DumpFields;
-import com.tactfactory.nikonikoweb.utils.htmlform.FormList;
-import com.tactfactory.nikonikoweb.utils.htmlform.FormList.FormRow;
 
 @Controller
 @RequestMapping(ProjectController.BASE_URL)
@@ -29,8 +26,46 @@ public class ProjectController extends ViewBaseController<Project> {
 
 	public final static String BASE_URL = "/project";
 
+	public final static String PROJECT_VIEW = "project";
+
+	public final static String index = "index";
+
+	protected final static String teams = "teams";
+	protected final static String teamsLinks = "teamslink";
+
+	protected final static String nikonikos = "nikonikos";
+	protected final static String nikonikosLinks = "nikonikoslink";
+
+	protected final static String PATH_INDEX = PROJECT_VIEW + PATH + index;
+
+	protected final static String PATH_TEAMS = PROJECT_VIEW + PATH + teams;
+	protected final static String PATH_TEAMSLINKS = PROJECT_VIEW + PATH
+			+ teamsLinks;
+	protected final static String PATH_TEAMSLINKS_REDIRECT = REDIRECT + PATH
+			+ PROJECT_VIEW + index;
+
+	protected final static String PATH_NIKONIKOS = PATH + PROJECT_VIEW
+			+ nikonikos;
+	protected final static String PATH_NIKONIKOSLINKS = PATH + PROJECT_VIEW
+			+ nikonikosLinks;
+	protected final static String PATH_NIKONIKOSLINKS_REDIRECT = REDIRECT
+			+ PATH + PROJECT_VIEW + index;
+
+	protected final static String PROJECT_ID = "{projectId}";
+	protected final static String ROUTE_INDEX = index;
+
+	protected final static String ROUTE_TEAMS = PROJECT_ID + PATH + teams;
+	protected final static String ROUTE_TEAMSLINKS = PROJECT_ID + PATH
+			+ teamsLinks;
+
+	protected final static String ROUTE_NIKONIKOS = PROJECT_ID + PATH
+			+ nikonikos;
+	protected final static String ROUTE_NIKONIKOSLINKS = PROJECT_ID + PATH
+			+ nikonikosLinks;
+
 	public ProjectController() {
 		super(Project.class, BASE_URL);
+		this.listView = index;
 	}
 
 	@Autowired
@@ -42,17 +77,18 @@ public class ProjectController extends ViewBaseController<Project> {
 	@Autowired
 	INikoNikoCrudRepository nikonikoCrud;
 
-	@RequestMapping("index")
+	@RequestMapping(ROUTE_INDEX)
 	public String projects(Model model) {
 		model.addAttribute("page", "All projects");
 		model.addAttribute("fields",
 				DumpFields.createContentsEmpty(super.getClazz()).fields);
 		model.addAttribute("items", DumpFields.listFielder(super.getItems()));
-		return "project/index";
+		return PATH_INDEX;
 	}
 
-	@RequestMapping(path="{projectId}/teamslink", method = RequestMethod.GET)
-	public String setTeamsForProjectGet(Model model, @PathVariable Long projectId) {
+	@RequestMapping(path = ROUTE_TEAMSLINKS, method = RequestMethod.GET)
+	public String setTeamsForProjectGet(Model model,
+			@PathVariable Long projectId) {
 		Project project = super.getItem(projectId);
 
 		model.addAttribute("page", project.getName() + " teams linker");
@@ -60,7 +96,7 @@ public class ProjectController extends ViewBaseController<Project> {
 		model.addAttribute("currentItem", DumpFields.fielder(project));
 
 		List<Team> teams = (List<Team>) teamCrud.findAll();
-		model.addAttribute("items", DumpFields.<Team>listFielder(teams));
+		model.addAttribute("items", DumpFields.<Team> listFielder(teams));
 
 		ArrayList<Long> teamsIds = new ArrayList<Long>();
 		for (Team team : project.getTeams()) {
@@ -68,11 +104,13 @@ public class ProjectController extends ViewBaseController<Project> {
 		}
 		model.addAttribute("linkedItems", teamsIds);
 
-		return "project/teamslink";
+		return PATH_TEAMSLINKS;
 	}
 
-	@RequestMapping(path="{projectId}/teamslink", method = RequestMethod.POST)
-	public String setTeamsForProjectPost(Model model, @PathVariable Long projectId, @RequestParam(value = "ids[]") Long[] ids) {
+	@RequestMapping(path = ROUTE_TEAMSLINKS, method = RequestMethod.POST)
+	public String setTeamsForProjectPost(Model model,
+			@PathVariable Long projectId,
+			@RequestParam(value = "ids[]") Long[] ids) {
 		Project project = super.getItem(projectId);
 
 		project.getTeams().clear();
@@ -85,22 +123,24 @@ public class ProjectController extends ViewBaseController<Project> {
 
 		projectCrud.save(project);
 
-		return "redirect:/project/index";
+		return PATH_TEAMSLINKS_REDIRECT;
 	}
 
-	@RequestMapping("{projectId}/teams")
+	@RequestMapping(path = ROUTE_TEAMS, method = RequestMethod.GET)
 	public String getTeamsForProject(Model model, @PathVariable Long projectId) {
 		Project project = super.getItem(projectId);
 
 		model.addAttribute("page", project.getName() + " teams");
 		model.addAttribute("fields", Team.FIELDS);
 		model.addAttribute("currentItem", DumpFields.fielder(project));
-		model.addAttribute("items", DumpFields.<Team>listFielder(new ArrayList<Team>(project.getTeams())));
-		return "project/teams";
+		model.addAttribute("items", DumpFields
+				.<Team> listFielder(new ArrayList<Team>(project.getTeams())));
+		return PATH_TEAMS;
 	}
 
-	@RequestMapping(path="{projectId}/nikonikoslink", method = RequestMethod.GET)
-	public String setNikoNikosForProjectGet(Model model, @PathVariable Long projectId) {
+	@RequestMapping(path = ROUTE_NIKONIKOSLINKS, method = RequestMethod.GET)
+	public String setNikoNikosForProjectGet(Model model,
+			@PathVariable Long projectId) {
 		Project project = super.getItem(projectId);
 
 		model.addAttribute("page", project.getName() + " nikonikos linker");
@@ -108,7 +148,8 @@ public class ProjectController extends ViewBaseController<Project> {
 		model.addAttribute("currentItem", DumpFields.fielder(project));
 
 		List<NikoNiko> nikoNikos = (List<NikoNiko>) nikonikoCrud.findAll();
-		model.addAttribute("items", DumpFields.<NikoNiko>listFielder(nikoNikos));
+		model.addAttribute("items",
+				DumpFields.<NikoNiko> listFielder(nikoNikos));
 
 		ArrayList<Long> nikoNikosIds = new ArrayList<Long>();
 		for (NikoNiko nikoNiko : project.getNikoNikos()) {
@@ -116,11 +157,13 @@ public class ProjectController extends ViewBaseController<Project> {
 		}
 		model.addAttribute("linkedItems", nikoNikosIds);
 
-		return "project/nikonikoslink";
+		return PATH_NIKONIKOSLINKS;
 	}
 
-	@RequestMapping(path="{projectId}/nikonikoslink", method = RequestMethod.POST)
-	public String setNikoNikosForProjectPost(Model model, @PathVariable Long projectId, @RequestParam(value = "ids[]") Long[] ids) {
+	@RequestMapping(path = ROUTE_NIKONIKOSLINKS, method = RequestMethod.POST)
+	public String setNikoNikosForProjectPost(Model model,
+			@PathVariable Long projectId,
+			@RequestParam(value = "ids[]") Long[] ids) {
 		Project project = super.getItem(projectId);
 
 		project.getNikoNikos().clear();
@@ -133,17 +176,20 @@ public class ProjectController extends ViewBaseController<Project> {
 
 		projectCrud.save(project);
 
-		return "redirect:/project/index";
+		return PATH_NIKONIKOSLINKS_REDIRECT;
 	}
 
-	@RequestMapping("{projectId}/nikonikos")
-	public String getNikoNikosForProject(Model model, @PathVariable Long projectId) {
+	@RequestMapping(path = ROUTE_NIKONIKOS, method = RequestMethod.GET)
+	public String getNikoNikosForProject(Model model,
+			@PathVariable Long projectId) {
 		Project project = super.getItem(projectId);
 
 		model.addAttribute("page", project.getName() + " nikonikos");
 		model.addAttribute("fields", NikoNiko.FIELDS);
 		model.addAttribute("currentItem", DumpFields.fielder(project));
-		model.addAttribute("items", DumpFields.<NikoNiko>listFielder(new ArrayList<NikoNiko>(project.getNikoNikos())));
-		return "project/nikonikos";
+		model.addAttribute("items", DumpFields
+				.<NikoNiko> listFielder(new ArrayList<NikoNiko>(project
+						.getNikoNikos())));
+		return PATH_NIKONIKOS;
 	}
 }
