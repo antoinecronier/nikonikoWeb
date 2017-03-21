@@ -44,9 +44,9 @@ public class ProjectController extends ViewBaseController<Project> {
 	protected final static String PATH_TEAMSLINKS_REDIRECT = REDIRECT + PATH
 			+ PROJECT_VIEW + index;
 
-	protected final static String PATH_NIKONIKOS = PATH + PROJECT_VIEW
+	protected final static String PATH_NIKONIKOS =  PROJECT_VIEW + PATH
 			+ nikonikos;
-	protected final static String PATH_NIKONIKOSLINKS = PATH + PROJECT_VIEW
+	protected final static String PATH_NIKONIKOSLINKS = PROJECT_VIEW + PATH
 			+ nikonikosLinks;
 	protected final static String PATH_NIKONIKOSLINKS_REDIRECT = REDIRECT
 			+ PATH + PROJECT_VIEW + index;
@@ -65,7 +65,7 @@ public class ProjectController extends ViewBaseController<Project> {
 
 	public ProjectController() {
 		super(Project.class, BASE_URL);
-		this.listView = index;
+		this.basePage = index;
 	}
 
 	@Autowired
@@ -83,6 +83,11 @@ public class ProjectController extends ViewBaseController<Project> {
 		model.addAttribute("fields",
 				DumpFields.createContentsEmpty(super.getClazz()).fields);
 		model.addAttribute("items", DumpFields.listFielder(super.getItems()));
+		model.addAttribute(
+				"currentItem",
+				DumpFields.fielderAdvance(
+						DumpFields.createContentsEmpty(super.getClazz()),
+						super.getClazz()));
 		return PATH_INDEX;
 	}
 

@@ -227,6 +227,7 @@ public class DumpFields {
 			for (Field realField : realFields) {
 				if (realField.getName().equals(field.getKey())) {
 					tempField.put("type", realField.getType().getSimpleName());
+					tempField.put("name", realField.getName());
 					tempField.put("isbase", true);
 					realFieldSelected = realField;
 					break;

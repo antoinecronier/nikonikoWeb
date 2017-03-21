@@ -34,17 +34,16 @@
                         </#if>
                     </#list>
                 </#list>
-                <td>
-                    <a href="${item["id"]}/teams">Teams</a>
-                    <br>
-                    <a href="${item["id"]}/teamslink">Associate Teams</a>
-                </td>
-
-                <td>
-                    <a href="${item["id"]}/nikonikos">NikoNikos</a>
-                    <br>
-                    <a href="${item["id"]}/nikonikoslink">Associate NikoNikos</a>
-                </td>
+                <#list currentItem?keys as key>
+                    <#assign subItem = currentItem[key]>
+                    <#if subItem['ManyToMany']?? || subItem['OneToMany']??>
+                        <td>
+                            <a href="${item["id"]}/${subItem['name']?lower_case}">${subItem['name']?lower_case}</a>
+                            <br>
+                            <a href="${item["id"]}/${subItem['name']?lower_case}link">Associate ${subItem['name']?lower_case}</a>
+                        </td>
+                    </#if>
+                </#list>
 
                 <td>
                     <form action="${item["id"]}/delete" method="POST">

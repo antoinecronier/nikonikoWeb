@@ -15,6 +15,8 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 
 	private String baseName;
 
+	protected String basePage;
+
 	protected String createView;
 	protected String createRedirect;
 
@@ -36,6 +38,7 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 
 		this.baseName = baseName;
 		this.baseView = "base";
+		this.basePage = LIST_ACTION;
 
 		this.createView = this.baseView + PATH_CREATE_FILE;
 		this.deleteView = this.baseView + PATH_DELETE_FILE;
@@ -78,6 +81,7 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 				DumpFields.fielderAdvance(
 						DumpFields.createContentsEmpty(super.getClazz()),
 						super.getClazz()));
+		model.addAttribute("basePage",basePage);
 		return createView;
 	}
 
