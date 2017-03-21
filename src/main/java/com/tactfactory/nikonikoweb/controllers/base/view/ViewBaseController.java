@@ -13,7 +13,8 @@ import com.tactfactory.nikonikoweb.utils.DumpFields;
 public abstract class ViewBaseController<T extends DatabaseItem> extends
 		BaseController<T> {
 
-	private String baseName;
+	protected String baseName;
+	protected String basePath;
 
 	protected String basePage;
 
@@ -33,10 +34,11 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 	protected String listRedirect;
 	protected String baseView;
 
-	protected ViewBaseController(Class<T> clazz, String baseName) {
+	protected ViewBaseController(Class<T> clazz, String basePath) {
 		super(clazz);
 
-		this.baseName = baseName;
+		this.baseName = clazz.getSimpleName();
+		this.basePath = basePath;
 		this.baseView = "base";
 		this.basePage = LIST_ACTION;
 
@@ -46,11 +48,11 @@ public abstract class ViewBaseController<T extends DatabaseItem> extends
 		this.showView = this.baseView + PATH_SHOW_FILE;
 		this.listView = this.baseView + PATH_LIST_FILE;
 
-		this.createRedirect = REDIRECT + this.baseName + PATH + ROUTE_LIST;
-		this.deleteRedirect = REDIRECT + this.baseName + PATH + ROUTE_LIST;
-		this.updateRedirect = REDIRECT + this.baseName + PATH + ROUTE_LIST;
-		this.showRedirect = REDIRECT + this.baseName + PATH + ROUTE_LIST;
-		this.listRedirect = REDIRECT + this.baseName + PATH + ROUTE_LIST;
+		this.createRedirect = REDIRECT + this.basePath + PATH + ROUTE_LIST;
+		this.deleteRedirect = REDIRECT + this.basePath + PATH + ROUTE_LIST;
+		this.updateRedirect = REDIRECT + this.basePath + PATH + ROUTE_LIST;
+		this.showRedirect = REDIRECT + this.basePath + PATH + ROUTE_LIST;
+		this.listRedirect = REDIRECT + this.basePath + PATH + ROUTE_LIST;
 	}
 
 	@RequestMapping(value = { PATH, ROUTE_LIST }, method = RequestMethod.GET)

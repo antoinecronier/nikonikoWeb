@@ -12,6 +12,7 @@
             </#list>
         </tr>
 
+        <#if items?has_content>
         <form id="associateForm" action="" method="POST">
             <#list items as item>
                 <tr>
@@ -58,4 +59,7 @@
                 </td>
             </tr>
         </form>
+        <#else>
+            No items founded.
+        </#if>
     </table>

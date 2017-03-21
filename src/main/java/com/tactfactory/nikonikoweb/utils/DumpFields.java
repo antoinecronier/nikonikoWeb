@@ -347,8 +347,7 @@ public class DumpFields {
 		}
 
 		for (Class class1 : classes) {
-			result.add(class1.getSimpleName().replace("ViewController", "")
-					.toLowerCase());
+			result.add(class1.getSimpleName());
 		}
 		return result;
 	}

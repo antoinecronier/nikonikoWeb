@@ -1,4 +1,4 @@
-package com.tactfactory.nikonikoweb.controllers;
+package com.tactfactory.nikonikoweb.controllers.view.admin;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,12 +21,13 @@ import com.tactfactory.nikonikoweb.models.Team;
 import com.tactfactory.nikonikoweb.utils.DumpFields;
 
 @Controller
-@RequestMapping(ProjectController.BASE_URL)
-public class ProjectController extends ViewBaseController<Project> {
+@RequestMapping(ProjectViewController.BASE_URL)
+public class ProjectViewController extends ViewBaseController<Project> {
 
-	public final static String BASE_URL = "/project";
+	public final static String BASE_URL = "/admin/project";
 
-	public final static String PROJECT_VIEW = "project";
+	public final static String ROUTE_BASE = "project";
+	public final static String PATH_BASE = "base";
 
 	public final static String index = "index";
 
@@ -36,20 +37,23 @@ public class ProjectController extends ViewBaseController<Project> {
 	protected final static String nikonikos = "nikonikos";
 	protected final static String nikonikosLinks = "nikonikoslink";
 
-	protected final static String PATH_INDEX = PROJECT_VIEW + PATH + index;
+	protected final static String associationMultiShow = "associationMutliShow";
+	protected final static String associationMultiEdit = "associationMultiEdit";
 
-	protected final static String PATH_TEAMS = PROJECT_VIEW + PATH + teams;
-	protected final static String PATH_TEAMSLINKS = PROJECT_VIEW + PATH
-			+ teamsLinks;
+	protected final static String PATH_INDEX = PATH_BASE + PATH + index;
+
+	protected final static String PATH_TEAMS = PATH_BASE + PATH + associationMultiShow;
+	protected final static String PATH_TEAMSLINKS = PATH_BASE + PATH
+			+ associationMultiEdit;
 	protected final static String PATH_TEAMSLINKS_REDIRECT = REDIRECT + PATH
-			+ PROJECT_VIEW + index;
+			+ PATH_BASE + PATH + index;
 
-	protected final static String PATH_NIKONIKOS =  PROJECT_VIEW + PATH
-			+ nikonikos;
-	protected final static String PATH_NIKONIKOSLINKS = PROJECT_VIEW + PATH
-			+ nikonikosLinks;
+	protected final static String PATH_NIKONIKOS =  PATH_BASE + PATH
+			+ associationMultiShow;
+	protected final static String PATH_NIKONIKOSLINKS = PATH_BASE + PATH
+			+ associationMultiEdit;
 	protected final static String PATH_NIKONIKOSLINKS_REDIRECT = REDIRECT
-			+ PATH + PROJECT_VIEW + index;
+			+ PATH + PATH_BASE + PATH + index;
 
 	protected final static String PROJECT_ID = "{projectId}";
 	protected final static String ROUTE_INDEX = index;
@@ -63,9 +67,14 @@ public class ProjectController extends ViewBaseController<Project> {
 	protected final static String ROUTE_NIKONIKOSLINKS = PROJECT_ID + PATH
 			+ nikonikosLinks;
 
-	public ProjectController() {
+	public ProjectViewController() {
 		super(Project.class, BASE_URL);
 		this.basePage = index;
+		this.createRedirect = REDIRECT + this.basePath + PATH + ROUTE_INDEX;
+		this.deleteRedirect = REDIRECT + this.basePath + PATH + ROUTE_INDEX;
+		this.updateRedirect = REDIRECT + this.basePath + PATH + ROUTE_INDEX;
+		this.showRedirect = REDIRECT + this.basePath + PATH + ROUTE_INDEX;
+		this.listRedirect = REDIRECT + this.basePath + PATH + ROUTE_INDEX;
 	}
 
 	@Autowired
@@ -77,7 +86,7 @@ public class ProjectController extends ViewBaseController<Project> {
 	@Autowired
 	INikoNikoCrudRepository nikonikoCrud;
 
-	@RequestMapping(ROUTE_INDEX)
+	@RequestMapping(path = ROUTE_INDEX, method = RequestMethod.GET)
 	public String projects(Model model) {
 		model.addAttribute("page", "All projects");
 		model.addAttribute("fields",
