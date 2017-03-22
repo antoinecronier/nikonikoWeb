@@ -28,6 +28,7 @@ public class TeamViewController extends ViewBaseController<Team>{
 	public final static String BASE_URL = "/admin/team";
 
 	public final static String ROUTE_BASE = "team";
+	public final static String ROUTE_REDIRECT = "admin/team";
 	public final static String PATH_BASE = "base";
 
 	public final static String index = "index";
@@ -47,14 +48,14 @@ public class TeamViewController extends ViewBaseController<Team>{
 	protected final static String PATH_USERSLINKS = PATH_BASE + PATH
 			+ associationMultiEdit;
 	protected final static String PATH_USERSLINKS_REDIRECT = REDIRECT + PATH
-			+ ROUTE_BASE + index;
+			+ ROUTE_REDIRECT + PATH + index;
 
 	protected final static String PATH_PROJECTS =  PATH_BASE + PATH
 			+ associationMultiShow;
 	protected final static String PATH_PROJECTSLINKS = PATH_BASE + PATH
 			+ associationMultiEdit;
 	protected final static String PATH_PROJECTSLINKS_REDIRECT = REDIRECT
-			+ PATH + ROUTE_BASE + index;
+			+ PATH + ROUTE_REDIRECT + PATH + index;
 
 	protected final static String PROJECT_ID = "{teamId}";
 	protected final static String ROUTE_INDEX = index;

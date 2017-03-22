@@ -43,6 +43,13 @@
                             <a href="${item["id"]}/${subItem['name']?lower_case}link">Associate ${subItem['name']?lower_case}</a>
                         </td>
                     </#if>
+                    <#if subItem['ManyToOne']?? || subItem['OneToOne']??>
+                        <td>
+                            <a href="${item["id"]}/${subItem['name']?lower_case}">${subItem['name']?lower_case}</a>
+                            <br>
+                            <a href="${item["id"]}/${subItem['name']?lower_case}link">Associate ${subItem['name']?lower_case}</a>
+                        </td>
+                    </#if>
                 </#list>
 
                 <td>

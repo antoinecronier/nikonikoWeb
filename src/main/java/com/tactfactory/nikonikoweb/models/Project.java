@@ -32,7 +32,7 @@ public class Project extends DatabaseItem {
 	private Date end_date;
 
 	@OneToMany
-	private Set<NikoNiko> nikoNikos;
+	private Set<NikoNiko> nikonikos;
 
 	@ManyToMany
 	private Set<Team> teams;
@@ -85,16 +85,16 @@ public class Project extends DatabaseItem {
 	/**
 	 * @return the nikoNikos
 	 */
-	public Set<NikoNiko> getNikoNikos() {
-		return nikoNikos;
+	public Set<NikoNiko> getNikonikos() {
+		return nikonikos;
 	}
 
 	/**
-	 * @param nikoNikos
+	 * @param nikonikos
 	 *            the nikoNikos to set
 	 */
-	public void setNikoNikos(Set<NikoNiko> nikoNikos) {
-		this.nikoNikos = nikoNikos;
+	public void setNikonikos(Set<NikoNiko> nikonikos) {
+		this.nikonikos = nikonikos;
 	}
 
 	/**

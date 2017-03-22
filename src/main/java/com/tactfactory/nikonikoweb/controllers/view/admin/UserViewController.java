@@ -27,6 +27,7 @@ public class UserViewController extends ViewBaseController<User> {
 	public final static String BASE_URL = "/admin/user";
 
 	public final static String ROUTE_BASE = "user";
+	public final static String ROUTE_REDIRECT = "admin/user";
 	public final static String PATH_BASE = "base";
 
 	public final static String index = "index";
@@ -47,25 +48,25 @@ public class UserViewController extends ViewBaseController<User> {
 	protected final static String PATH_TEAMSLINKS = PATH_BASE + PATH
 			+ associationMultiEdit;
 	protected final static String PATH_TEAMSLINKS_REDIRECT = REDIRECT + PATH
-			+ PATH_BASE + PATH + index;
+			+ ROUTE_REDIRECT + PATH + index;
 
 	protected final static String PATH_NIKONIKOS = PATH_BASE + PATH
 			+ associationMultiShow;
 	protected final static String PATH_NIKONIKOSLINKS = PATH_BASE + PATH
 			+ associationMultiEdit;
 	protected final static String PATH_NIKONIKOSLINKS_REDIRECT = REDIRECT
-			+ PATH + PATH_BASE + PATH + index;
+			+ PATH + ROUTE_REDIRECT + PATH + index;
 
-	protected final static String PROJECT_ID = "{projectId}";
+	protected final static String USER_ID = "{userId}";
 	protected final static String ROUTE_INDEX = index;
 
-	protected final static String ROUTE_TEAMS = PROJECT_ID + PATH + teams;
-	protected final static String ROUTE_TEAMSLINKS = PROJECT_ID + PATH
+	protected final static String ROUTE_TEAMS = USER_ID + PATH + teams;
+	protected final static String ROUTE_TEAMSLINKS = USER_ID + PATH
 			+ teamsLinks;
 
-	protected final static String ROUTE_NIKONIKOS = PROJECT_ID + PATH
+	protected final static String ROUTE_NIKONIKOS = USER_ID + PATH
 			+ nikonikos;
-	protected final static String ROUTE_NIKONIKOSLINKS = PROJECT_ID + PATH
+	protected final static String ROUTE_NIKONIKOSLINKS = USER_ID + PATH
 			+ nikonikosLinks;
 
 	public UserViewController() {
@@ -88,7 +89,7 @@ public class UserViewController extends ViewBaseController<User> {
 	INikoNikoCrudRepository nikonikoCrud;
 
 	@RequestMapping(path = ROUTE_INDEX, method = RequestMethod.GET)
-	public String projects(Model model) {
+	public String users(Model model) {
 		model.addAttribute("page", "All users");
 		model.addAttribute("fields",
 				DumpFields.createContentsEmpty(super.getClazz()).fields);
@@ -102,8 +103,8 @@ public class UserViewController extends ViewBaseController<User> {
 	}
 
 	@RequestMapping(path = ROUTE_TEAMSLINKS, method = RequestMethod.GET)
-	public String setTeamsForUserGet(Model model, @PathVariable Long projectId) {
-		User user = super.getItem(projectId);
+	public String setTeamsForUserGet(Model model, @PathVariable Long userId) {
+		User user = super.getItem(userId);
 
 		model.addAttribute("page",
 				user.getLastname() + " " + user.getFirstname()
@@ -124,10 +125,10 @@ public class UserViewController extends ViewBaseController<User> {
 	}
 
 	@RequestMapping(path = ROUTE_TEAMSLINKS, method = RequestMethod.POST)
-	public String setTeamsForProjectPost(Model model,
-			@PathVariable Long projectId,
+	public String setTeamsForUserPost(Model model,
+			@PathVariable Long userId,
 			@RequestParam(value = "ids[]") Long[] ids) {
-		User user = super.getItem(projectId);
+		User user = super.getItem(userId);
 
 		user.getTeams().clear();
 
@@ -143,8 +144,8 @@ public class UserViewController extends ViewBaseController<User> {
 	}
 
 	@RequestMapping(path = ROUTE_TEAMS, method = RequestMethod.GET)
-	public String getTeamsForProject(Model model, @PathVariable Long projectId) {
-		User user = super.getItem(projectId);
+	public String getTeamsForUser(Model model, @PathVariable Long userId) {
+		User user = super.getItem(userId);
 
 		model.addAttribute("page",
 				user.getLastname() + " " + user.getFirstname() + " teams");
@@ -156,9 +157,9 @@ public class UserViewController extends ViewBaseController<User> {
 	}
 
 	@RequestMapping(path = ROUTE_NIKONIKOSLINKS, method = RequestMethod.GET)
-	public String setNikoNikosForProjectGet(Model model,
-			@PathVariable Long projectId) {
-		User user = super.getItem(projectId);
+	public String setNikoNikosForUserGet(Model model,
+			@PathVariable Long userId) {
+		User user = super.getItem(userId);
 
 		model.addAttribute("page",
 				user.getLastname() + " " + user.getFirstname()
@@ -166,12 +167,13 @@ public class UserViewController extends ViewBaseController<User> {
 		model.addAttribute("fields", NikoNiko.FIELDS);
 		model.addAttribute("currentItem", DumpFields.fielder(user));
 
-		List<NikoNiko> nikoNikos = (List<NikoNiko>) nikonikoCrud.findAll();
+		List<NikoNiko> nikoNikos = (List<NikoNiko>) nikonikoCrud.findUserAssociate(userId);
+		nikoNikos.addAll(nikonikoCrud.findWithoutUserAssociate());
 		model.addAttribute("items",
 				DumpFields.<NikoNiko> listFielder(nikoNikos));
 
 		ArrayList<Long> nikoNikosIds = new ArrayList<Long>();
-		for (NikoNiko nikoNiko : user.getNikoNikos()) {
+		for (NikoNiko nikoNiko : user.getNikonikos()) {
 			nikoNikosIds.add(nikoNiko.getId());
 		}
 		model.addAttribute("linkedItems", nikoNikosIds);
@@ -180,16 +182,16 @@ public class UserViewController extends ViewBaseController<User> {
 	}
 
 	@RequestMapping(path = ROUTE_NIKONIKOSLINKS, method = RequestMethod.POST)
-	public String setNikoNikosForProjectPost(Model model,
-			@PathVariable Long projectId,
+	public String setNikoNikosForUserPost(Model model,
+			@PathVariable Long userId,
 			@RequestParam(value = "ids[]") Long[] ids) {
-		User user = super.getItem(projectId);
+		User user = super.getItem(userId);
 
-		user.getNikoNikos().clear();
+		user.getNikonikos().clear();
 
 		for (Long id : ids) {
 			if (id != 0) {
-				user.getNikoNikos().add(nikonikoCrud.findOne(id));
+				user.getNikonikos().add(nikonikoCrud.findOne(id));
 			}
 		}
 
@@ -199,9 +201,9 @@ public class UserViewController extends ViewBaseController<User> {
 	}
 
 	@RequestMapping(path = ROUTE_NIKONIKOS, method = RequestMethod.GET)
-	public String getNikoNikosForProject(Model model,
-			@PathVariable Long projectId) {
-		User user = super.getItem(projectId);
+	public String getNikoNikosForUser(Model model,
+			@PathVariable Long userId) {
+		User user = super.getItem(userId);
 
 		model.addAttribute("page",
 				user.getLastname() + " " + user.getFirstname() + " nikonikos");
@@ -209,7 +211,7 @@ public class UserViewController extends ViewBaseController<User> {
 		model.addAttribute("currentItem", DumpFields.fielder(user));
 		model.addAttribute("items", DumpFields
 				.<NikoNiko> listFielder(new ArrayList<NikoNiko>(user
-						.getNikoNikos())));
+						.getNikonikos())));
 		return PATH_NIKONIKOS;
 	}
 }

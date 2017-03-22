@@ -120,16 +120,16 @@ public class User extends SecurityUser {
 	/**
 	 * @return the nikoNikos
 	 */
-	public Set<NikoNiko> getNikoNikos() {
+	public Set<NikoNiko> getNikonikos() {
 		return nikonikos;
 	}
 
 	/**
-	 * @param nikoNikos
+	 * @param nikonikos
 	 *            the nikoNikos to set
 	 */
-	public void setNikoNikos(Set<NikoNiko> nikoNikos) {
-		this.nikonikos = nikoNikos;
+	public void setNikonikos(Set<NikoNiko> nikonikos) {
+		this.nikonikos = nikonikos;
 	}
 
 	/**

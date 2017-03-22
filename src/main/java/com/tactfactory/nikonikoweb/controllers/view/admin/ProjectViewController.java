@@ -27,6 +27,7 @@ public class ProjectViewController extends ViewBaseController<Project> {
 	public final static String BASE_URL = "/admin/project";
 
 	public final static String ROUTE_BASE = "project";
+	public final static String ROUTE_REDIRECT = "admin/project";
 	public final static String PATH_BASE = "base";
 
 	public final static String index = "index";
@@ -46,14 +47,14 @@ public class ProjectViewController extends ViewBaseController<Project> {
 	protected final static String PATH_TEAMSLINKS = PATH_BASE + PATH
 			+ associationMultiEdit;
 	protected final static String PATH_TEAMSLINKS_REDIRECT = REDIRECT + PATH
-			+ PATH_BASE + PATH + index;
+			+ ROUTE_REDIRECT + PATH + index;
 
 	protected final static String PATH_NIKONIKOS =  PATH_BASE + PATH
 			+ associationMultiShow;
 	protected final static String PATH_NIKONIKOSLINKS = PATH_BASE + PATH
 			+ associationMultiEdit;
 	protected final static String PATH_NIKONIKOSLINKS_REDIRECT = REDIRECT
-			+ PATH + PATH_BASE + PATH + index;
+			+ PATH + ROUTE_REDIRECT + PATH + index;
 
 	protected final static String PROJECT_ID = "{projectId}";
 	protected final static String ROUTE_INDEX = index;
@@ -161,12 +162,13 @@ public class ProjectViewController extends ViewBaseController<Project> {
 		model.addAttribute("fields", NikoNiko.FIELDS);
 		model.addAttribute("currentItem", DumpFields.fielder(project));
 
-		List<NikoNiko> nikoNikos = (List<NikoNiko>) nikonikoCrud.findAll();
+		List<NikoNiko> nikoNikos = nikonikoCrud.findProjectAssociate(projectId);
+		nikoNikos.addAll(nikonikoCrud.findWithoutProjectAssociate());
 		model.addAttribute("items",
 				DumpFields.<NikoNiko> listFielder(nikoNikos));
 
 		ArrayList<Long> nikoNikosIds = new ArrayList<Long>();
-		for (NikoNiko nikoNiko : project.getNikoNikos()) {
+		for (NikoNiko nikoNiko : project.getNikonikos()) {
 			nikoNikosIds.add(nikoNiko.getId());
 		}
 		model.addAttribute("linkedItems", nikoNikosIds);
@@ -180,11 +182,11 @@ public class ProjectViewController extends ViewBaseController<Project> {
 			@RequestParam(value = "ids[]") Long[] ids) {
 		Project project = super.getItem(projectId);
 
-		project.getNikoNikos().clear();
+		project.getNikonikos().clear();
 
 		for (Long id : ids) {
 			if (id != 0) {
-				project.getNikoNikos().add(nikonikoCrud.findOne(id));
+				project.getNikonikos().add(nikonikoCrud.findOne(id));
 			}
 		}
 
@@ -203,7 +205,7 @@ public class ProjectViewController extends ViewBaseController<Project> {
 		model.addAttribute("currentItem", DumpFields.fielder(project));
 		model.addAttribute("items", DumpFields
 				.<NikoNiko> listFielder(new ArrayList<NikoNiko>(project
-						.getNikoNikos())));
+						.getNikonikos())));
 		return PATH_NIKONIKOS;
 	}
 }

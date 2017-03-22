@@ -239,7 +239,7 @@ public class DumpFields {
 						.getAnnotation(javax.persistence.ManyToOne.class) != null) {
 					javax.persistence.ManyToOne annotation = realFieldSelected
 							.getAnnotation(javax.persistence.ManyToOne.class);
-					tempField.put("ManyToOne", annotation.targetEntity()
+					tempField.putIfAbsent("ManyToOne", annotation.targetEntity()
 							.getName());
 					tempField.putIfAbsent("isbase", false);
 
@@ -274,7 +274,7 @@ public class DumpFields {
 						.getAnnotation(javax.persistence.ManyToMany.class) != null) {
 					javax.persistence.ManyToMany annotation = realFieldSelected
 							.getAnnotation(javax.persistence.ManyToMany.class);
-					tempField.put("ManyToMany", annotation.targetEntity()
+					tempField.putIfAbsent("ManyToMany", annotation.targetEntity()
 							.getName());
 					tempField.putIfAbsent("isbase", false);
 				}
