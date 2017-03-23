@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -34,7 +36,10 @@ public class Project extends DatabaseItem {
 	@OneToMany
 	private Set<NikoNiko> nikonikos;
 
-	@ManyToMany(mappedBy = "projects")
+	@ManyToMany
+	@JoinTable(name = "teams_projects",
+		joinColumns = @JoinColumn(name = "project_id"),
+		inverseJoinColumns = @JoinColumn(name = "team_id"))
 	private Set<Team> teams;
 
 	/**

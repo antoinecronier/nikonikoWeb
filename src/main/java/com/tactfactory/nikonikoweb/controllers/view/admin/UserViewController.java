@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -108,6 +109,7 @@ public class UserViewController extends ViewBaseController<User> {
 	@Autowired
 	ISecurityRoleCrudRepository securityRoleCrud;
 
+	@Secured("ROLE_PROJECTLEADER")
 	@RequestMapping(path = ROUTE_INDEX, method = RequestMethod.GET)
 	public String users(Model model) {
 		model.addAttribute("page", "All users");
@@ -122,6 +124,7 @@ public class UserViewController extends ViewBaseController<User> {
 		return PATH_INDEX;
 	}
 
+	@Secured("ROLE_PROJECTLEADER")
 	@RequestMapping(path = ROUTE_TEAMSLINKS, method = RequestMethod.GET)
 	public String setTeamsForUserGet(Model model, @PathVariable Long userId) {
 		User user = super.getItem(userId);
@@ -144,6 +147,7 @@ public class UserViewController extends ViewBaseController<User> {
 		return PATH_TEAMSLINKS;
 	}
 
+	@Secured("ROLE_PROJECTLEADER")
 	@RequestMapping(path = ROUTE_TEAMSLINKS, method = RequestMethod.POST)
 	public String setTeamsForUserPost(Model model,
 			@PathVariable Long userId,
@@ -163,6 +167,7 @@ public class UserViewController extends ViewBaseController<User> {
 		return PATH_TEAMSLINKS_REDIRECT;
 	}
 
+	@Secured("ROLE_PROJECTLEADER")
 	@RequestMapping(path = ROUTE_TEAMS, method = RequestMethod.GET)
 	public String getTeamsForUser(Model model, @PathVariable Long userId) {
 		User user = super.getItem(userId);
@@ -176,6 +181,7 @@ public class UserViewController extends ViewBaseController<User> {
 		return PATH_TEAMS;
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(path = ROUTE_NIKONIKOSLINKS, method = RequestMethod.GET)
 	public String setNikoNikosForUserGet(Model model,
 			@PathVariable Long userId) {
@@ -201,6 +207,7 @@ public class UserViewController extends ViewBaseController<User> {
 		return PATH_NIKONIKOSLINKS;
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(path = ROUTE_NIKONIKOSLINKS, method = RequestMethod.POST)
 	public String setNikoNikosForUserPost(Model model,
 			@PathVariable Long userId,
@@ -220,6 +227,7 @@ public class UserViewController extends ViewBaseController<User> {
 		return PATH_NIKONIKOSLINKS_REDIRECT;
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(path = ROUTE_NIKONIKOS, method = RequestMethod.GET)
 	public String getNikoNikosForUser(Model model,
 			@PathVariable Long userId) {
@@ -235,6 +243,7 @@ public class UserViewController extends ViewBaseController<User> {
 		return PATH_NIKONIKOS;
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(path = ROUTE_SECURITYROLESLINKS, method = RequestMethod.GET)
 	public String setSecurityRolesForUserGet(Model model, @PathVariable Long userId) {
 		User user = super.getItem(userId);
@@ -257,6 +266,7 @@ public class UserViewController extends ViewBaseController<User> {
 		return PATH_SECURITYROLESLINKS;
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(path = ROUTE_SECURITYROLESLINKS, method = RequestMethod.POST)
 	public String setSecurityRolesForUserPost(Model model,
 			@PathVariable Long userId,
@@ -276,6 +286,7 @@ public class UserViewController extends ViewBaseController<User> {
 		return PATH_SECURITYROLESLINKS_REDIRECT;
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(path = ROUTE_SECURITYROLES, method = RequestMethod.GET)
 	public String getSecurityRolesForUser(Model model, @PathVariable Long userId) {
 		User user = super.getItem(userId);

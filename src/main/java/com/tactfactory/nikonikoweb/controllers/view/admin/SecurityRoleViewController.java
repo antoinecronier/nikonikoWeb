@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,6 +67,7 @@ public class SecurityRoleViewController extends ViewBaseController<SecurityRole>
 	@Autowired
 	IUserCrudRepository userCrud;
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(ROUTE_INDEX)
 	public String projects(Model model) {
 		model.addAttribute("page", "All roles");
@@ -80,6 +82,7 @@ public class SecurityRoleViewController extends ViewBaseController<SecurityRole>
 		return PATH_INDEX;
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(path = ROUTE_USERSLINKS, method = RequestMethod.GET)
 	public String setTeamsForProjectGet(Model model,
 			@PathVariable Long securityRoleId) {
@@ -101,6 +104,7 @@ public class SecurityRoleViewController extends ViewBaseController<SecurityRole>
 		return PATH_USERSLINKS;
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(path = ROUTE_USERSLINKS, method = RequestMethod.POST)
 	public String setTeamsForProjectPost(Model model,
 			@PathVariable Long securityRoleId,
@@ -120,6 +124,7 @@ public class SecurityRoleViewController extends ViewBaseController<SecurityRole>
 		return PATH_USERSLINKS_REDIRECT;
 	}
 
+	@Secured("ROLE_ADMIN")
 	@RequestMapping(path = ROUTE_USERS, method = RequestMethod.GET)
 	public String getTeamsForProject(Model model, @PathVariable Long securityRoleId) {
 		SecurityRole securityRole = super.getItem(securityRoleId);

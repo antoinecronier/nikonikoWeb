@@ -30,14 +30,14 @@ public class Team extends DatabaseItem {
 
 	@ManyToMany
 	@JoinTable(name = "teams_projects",
-		joinColumns = @JoinColumn(name = "project_id"),
-		inverseJoinColumns = @JoinColumn(name = "team_id"))
+		joinColumns = @JoinColumn(name = "team_id"),
+		inverseJoinColumns = @JoinColumn(name = "project_id"))
 	private Set<Project> projects;
 
 	@ManyToMany
 	@JoinTable(name = "teams_users",
-		joinColumns = @JoinColumn(name = "user_id"),
-		inverseJoinColumns = @JoinColumn(name = "team_id"))
+		joinColumns = @JoinColumn(name = "team_id"),
+		inverseJoinColumns = @JoinColumn(name = "user_id"))
 	private Set<User> users;
 
 	/**

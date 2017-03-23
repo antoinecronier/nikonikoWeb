@@ -5,6 +5,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -29,7 +31,7 @@ public class User extends SecurityUser {
 	public static final String TABLE = "user";
 
     @Transient
-	public static final String[] FIELDS = { "id", "login", "password", "sex", "lastname", "firstname",
+	public static final String[] FIELDS = { "id", "login", "password", "enable", "sex", "lastname", "firstname",
 			"registration_cgi" };
 
     @Column(nullable = false)
@@ -44,7 +46,10 @@ public class User extends SecurityUser {
 	@OneToMany
 	private Set<NikoNiko> nikonikos;
 
-	@ManyToMany(mappedBy = "users")
+	@ManyToMany
+	@JoinTable(name = "teams_users",
+		joinColumns = @JoinColumn(name = "user_id"),
+		inverseJoinColumns = @JoinColumn(name = "team_id"))
 	private Set<Team> teams;
 
 	private Character sex;

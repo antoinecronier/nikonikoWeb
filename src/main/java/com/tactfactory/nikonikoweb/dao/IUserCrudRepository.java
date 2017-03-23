@@ -5,4 +5,5 @@ import com.tactfactory.nikonikoweb.models.User;
 
 public interface IUserCrudRepository extends IBaseCrudRepository<User>{
 
+	User findByLogin(String login);
 }

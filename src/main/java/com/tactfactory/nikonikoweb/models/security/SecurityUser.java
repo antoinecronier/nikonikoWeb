@@ -3,6 +3,8 @@ package com.tactfactory.nikonikoweb.models.security;
 import java.util.Set;
 
 import javax.persistence.Inheritance;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.MappedSuperclass;
 
@@ -16,7 +18,10 @@ public abstract class SecurityUser extends DatabaseItem {
 	private String password;
 	private Boolean enable;
 
-	@ManyToMany(mappedBy = "users")
+	@ManyToMany
+	@JoinTable(name = "users_securityroles",
+		joinColumns = @JoinColumn(name = "user_id"),
+		inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<SecurityRole> roles;
 
 	/**

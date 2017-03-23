@@ -9,6 +9,9 @@
     <h1>${page}</h1>
     <form id="createForm" action="" method="POST">
         <#include "../includable/formCreateContent.ftl">
+        <input type="hidden"
+           name="${_csrf.parameterName}"
+           value="${_csrf.token}"/>
         <br>
             <input type="submit" value="submit"/>
         </br>
