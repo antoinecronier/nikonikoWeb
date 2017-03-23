@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.tactfactory.nikonikoweb.controllers.base.view.ViewBaseController;
 import com.tactfactory.nikonikoweb.dao.INikoNikoCrudRepository;
+import com.tactfactory.nikonikoweb.dao.ISecurityRoleCrudRepository;
 import com.tactfactory.nikonikoweb.dao.ITeamCrudRepository;
 import com.tactfactory.nikonikoweb.dao.IUserCrudRepository;
 import com.tactfactory.nikonikoweb.models.NikoNiko;
 import com.tactfactory.nikonikoweb.models.Team;
 import com.tactfactory.nikonikoweb.models.User;
+import com.tactfactory.nikonikoweb.models.security.SecurityRole;
 import com.tactfactory.nikonikoweb.utils.DumpFields;
 
 @Controller
@@ -38,6 +40,9 @@ public class UserViewController extends ViewBaseController<User> {
 	protected final static String nikonikos = "nikonikos";
 	protected final static String nikonikosLinks = "nikonikoslink";
 
+	protected final static String securityroles = "roles";
+	protected final static String securityrolesLinks = "roleslink";
+
 	protected final static String associationMultiShow = "associationMutliShow";
 	protected final static String associationMultiEdit = "associationMultiEdit";
 
@@ -57,6 +62,13 @@ public class UserViewController extends ViewBaseController<User> {
 	protected final static String PATH_NIKONIKOSLINKS_REDIRECT = REDIRECT
 			+ PATH + ROUTE_REDIRECT + PATH + index;
 
+	protected final static String PATH_SECURITYROLES = PATH_BASE + PATH
+			+ associationMultiShow;
+	protected final static String PATH_SECURITYROLESLINKS = PATH_BASE + PATH
+			+ associationMultiEdit;
+	protected final static String PATH_SECURITYROLESLINKS_REDIRECT = REDIRECT
+			+ PATH + ROUTE_REDIRECT + PATH + index;
+
 	protected final static String USER_ID = "{userId}";
 	protected final static String ROUTE_INDEX = index;
 
@@ -68,6 +80,11 @@ public class UserViewController extends ViewBaseController<User> {
 			+ nikonikos;
 	protected final static String ROUTE_NIKONIKOSLINKS = USER_ID + PATH
 			+ nikonikosLinks;
+
+	protected final static String ROUTE_SECURITYROLES = USER_ID + PATH
+			+ securityroles;
+	protected final static String ROUTE_SECURITYROLESLINKS = USER_ID + PATH
+			+ securityrolesLinks;
 
 	public UserViewController() {
 		super(User.class, BASE_URL);
@@ -87,6 +104,9 @@ public class UserViewController extends ViewBaseController<User> {
 
 	@Autowired
 	INikoNikoCrudRepository nikonikoCrud;
+
+	@Autowired
+	ISecurityRoleCrudRepository securityRoleCrud;
 
 	@RequestMapping(path = ROUTE_INDEX, method = RequestMethod.GET)
 	public String users(Model model) {
@@ -213,5 +233,59 @@ public class UserViewController extends ViewBaseController<User> {
 				.<NikoNiko> listFielder(new ArrayList<NikoNiko>(user
 						.getNikonikos())));
 		return PATH_NIKONIKOS;
+	}
+
+	@RequestMapping(path = ROUTE_SECURITYROLESLINKS, method = RequestMethod.GET)
+	public String setSecurityRolesForUserGet(Model model, @PathVariable Long userId) {
+		User user = super.getItem(userId);
+
+		model.addAttribute("page",
+				user.getLastname() + " " + user.getFirstname()
+						+ " teams linker");
+		model.addAttribute("fields", SecurityRole.FIELDS);
+		model.addAttribute("currentItem", DumpFields.fielder(user));
+
+		List<SecurityRole> securityRoles = (List<SecurityRole>) securityRoleCrud.findAll();
+		model.addAttribute("items", DumpFields.<SecurityRole> listFielder(securityRoles));
+
+		ArrayList<Long> securityRolesIds = new ArrayList<Long>();
+		for (SecurityRole securityRole : user.getRoles()) {
+			securityRolesIds.add(securityRole.getId());
+		}
+		model.addAttribute("linkedItems", securityRolesIds);
+
+		return PATH_SECURITYROLESLINKS;
+	}
+
+	@RequestMapping(path = ROUTE_SECURITYROLESLINKS, method = RequestMethod.POST)
+	public String setSecurityRolesForUserPost(Model model,
+			@PathVariable Long userId,
+			@RequestParam(value = "ids[]") Long[] ids) {
+		User user = super.getItem(userId);
+
+		user.getRoles().clear();
+
+		for (Long id : ids) {
+			if (id != 0) {
+				user.getRoles().add(securityRoleCrud.findOne(id));
+			}
+		}
+
+		userCrud.save(user);
+
+		return PATH_SECURITYROLESLINKS_REDIRECT;
+	}
+
+	@RequestMapping(path = ROUTE_SECURITYROLES, method = RequestMethod.GET)
+	public String getSecurityRolesForUser(Model model, @PathVariable Long userId) {
+		User user = super.getItem(userId);
+
+		model.addAttribute("page",
+				user.getLastname() + " " + user.getFirstname() + " security roles");
+		model.addAttribute("fields", SecurityRole.FIELDS);
+		model.addAttribute("currentItem", DumpFields.fielder(user));
+		model.addAttribute("items", DumpFields
+				.<SecurityRole> listFielder(new ArrayList<SecurityRole>(user.getRoles())));
+		return PATH_SECURITYROLES;
 	}
 }
