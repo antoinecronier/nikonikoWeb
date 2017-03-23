@@ -10,9 +10,6 @@
         <#include "../includable/formShowContent.ftl">
     </table>
     <#include "../includable/associationMonoTableForm.ftl">
-    <input type="hidden"
-           name="${_csrf.parameterName}"
-           value="${_csrf.token}"/>
     <a href="../index">Back</a>
 </body>
 </html>
