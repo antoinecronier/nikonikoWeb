@@ -44,7 +44,7 @@ public class User extends SecurityUser {
 	@OneToMany
 	private Set<NikoNiko> nikonikos;
 
-	@ManyToMany
+	@ManyToMany(mappedBy = "users")
 	private Set<Team> teams;
 
 	private Character sex;

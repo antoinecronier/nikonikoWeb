@@ -16,7 +16,7 @@ public abstract class SecurityUser extends DatabaseItem {
 	private String password;
 	private Boolean enable;
 
-	@ManyToMany
+	@ManyToMany(mappedBy = "users")
 	private Set<SecurityRole> roles;
 
 	/**

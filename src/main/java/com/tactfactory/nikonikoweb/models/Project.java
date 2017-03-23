@@ -34,7 +34,7 @@ public class Project extends DatabaseItem {
 	@OneToMany
 	private Set<NikoNiko> nikonikos;
 
-	@ManyToMany
+	@ManyToMany(mappedBy = "projects")
 	private Set<Team> teams;
 
 	/**
