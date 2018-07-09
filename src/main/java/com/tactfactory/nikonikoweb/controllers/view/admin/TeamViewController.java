@@ -133,7 +133,7 @@ public class TeamViewController extends ViewBaseController<Team>{
 
 		for (Long id : ids) {
 			if (id != 0) {
-				team.getUsers().add(userCrud.findOne(id));
+				team.getUsers().add(userCrud.findById(id).get());
 			}
 		}
 
@@ -186,7 +186,7 @@ public class TeamViewController extends ViewBaseController<Team>{
 
 		for (Long id : ids) {
 			if (id != 0) {
-				team.getProjects().add(projectCrud.findOne(id));
+				team.getProjects().add(projectCrud.findById(id).get());
 			}
 		}
 

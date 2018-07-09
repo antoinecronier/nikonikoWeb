@@ -1,5 +1,7 @@
 package com.tactfactory.nikonikoweb.models.security;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Inheritance;
@@ -86,9 +88,11 @@ public abstract class SecurityUser extends DatabaseItem {
 		super(table, fields);
 		this.login = login;
 		this.password = password;
+		this.roles = new HashSet<SecurityRole>();
 	}
 
 	public SecurityUser(String table, String[] fields) {
 		super(table, fields);
+		this.roles = new HashSet<SecurityRole>();
 	}
 }

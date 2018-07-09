@@ -158,7 +158,7 @@ public class UserViewController extends ViewBaseController<User> {
 
 		for (Long id : ids) {
 			if (id != 0) {
-				user.getTeams().add(teamCrud.findOne(id));
+				user.getTeams().add(teamCrud.findById(id).get());
 			}
 		}
 
@@ -218,7 +218,7 @@ public class UserViewController extends ViewBaseController<User> {
 
 		for (Long id : ids) {
 			if (id != 0) {
-				user.getNikonikos().add(nikonikoCrud.findOne(id));
+				user.getNikonikos().add(nikonikoCrud.findById(id).get());
 			}
 		}
 
@@ -277,7 +277,7 @@ public class UserViewController extends ViewBaseController<User> {
 
 		for (Long id : ids) {
 			if (id != 0) {
-				user.getRoles().add(securityRoleCrud.findOne(id));
+				user.getRoles().add(securityRoleCrud.findById(id).get());
 			}
 		}
 

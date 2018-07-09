@@ -20,6 +20,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
+    	System.err.println("Try save " + user.getLogin() + " " + user.getPassword());
         user.setPassword(user.getPassword());
         user.setRoles((Set<SecurityRole>)roleRepository.findAll());
         userRepository.save(user);
@@ -27,6 +28,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findByLogin(String login) {
+    	System.err.println("Try find " + login);
         return userRepository.findByLogin(login);
     }
 }

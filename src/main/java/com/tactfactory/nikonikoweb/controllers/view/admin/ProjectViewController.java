@@ -132,7 +132,7 @@ public class ProjectViewController extends ViewBaseController<Project> {
 
 		for (Long id : ids) {
 			if (id != 0) {
-				project.getTeams().add(teamCrud.findOne(id));
+				project.getTeams().add(teamCrud.findById(id).get());
 			}
 		}
 
@@ -186,7 +186,7 @@ public class ProjectViewController extends ViewBaseController<Project> {
 
 		for (Long id : ids) {
 			if (id != 0) {
-				project.getNikonikos().add(nikonikoCrud.findOne(id));
+				project.getNikonikos().add(nikonikoCrud.findById(id).get());
 			}
 		}
 

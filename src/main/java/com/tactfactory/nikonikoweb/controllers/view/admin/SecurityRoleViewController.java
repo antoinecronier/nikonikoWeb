@@ -115,7 +115,7 @@ public class SecurityRoleViewController extends ViewBaseController<SecurityRole>
 
 		for (Long id : ids) {
 			if (id != 0) {
-				securityRole.getUsers().add(userCrud.findOne(id));
+				securityRole.getUsers().add(userCrud.findById(id).get());
 			}
 		}
 

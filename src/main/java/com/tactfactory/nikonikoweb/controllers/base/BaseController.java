@@ -1,6 +1,7 @@
 package com.tactfactory.nikonikoweb.controllers.base;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -63,7 +64,7 @@ public abstract class BaseController <T extends DatabaseItem> {
 
 	public String deleteItem(Long id){
 		try {
-			baseCrud.delete(id);
+			baseCrud.deleteById(id);
 		} catch (Exception e) {
 			return "Delete failed";
 		}
@@ -80,9 +81,10 @@ public abstract class BaseController <T extends DatabaseItem> {
 	}
 
 	public T getItem(Long id){
-		T item = null;
-		item = baseCrud.findOne(id);
-		return item;
+		Optional<T> item = null;
+		item = baseCrud.findById(id);
+		System.err.println("Base controller get " + item);
+		return item.get();
 	}
 
 	public List<T> getItems(){

@@ -125,7 +125,7 @@ public class NikoNikoViewController extends ViewBaseController<NikoNiko>{
 			@RequestParam(value = "idLinked") Long idLinked) {
 		NikoNiko nikoniko = super.getItem(nikonikoId);
 
-		nikoniko.setUser(userCrud.findOne(idLinked));
+		nikoniko.setUser(userCrud.findById(idLinked).get());
 
 		nikonikoCrud.save(nikoniko);
 
@@ -173,7 +173,7 @@ public class NikoNikoViewController extends ViewBaseController<NikoNiko>{
 			@RequestParam(value = "idLinked") Long idLinked) {
 		NikoNiko nikoniko = super.getItem(nikonikoId);
 
-		nikoniko.setProject(projectCrud.findOne(idLinked));
+		nikoniko.setProject(projectCrud.findById(idLinked).get());
 
 		nikonikoCrud.save(nikoniko);
 

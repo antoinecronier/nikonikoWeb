@@ -22,6 +22,7 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object o, Errors errors) {
         User user = (User) o;
+        System.err.println("Try validate " + user);
 
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "username", "NotEmpty");
         if (user.getLogin().length() < 6 || user.getLogin().length() > 32) {
